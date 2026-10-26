@@ -1,0 +1,1739 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-IIZp+nGkbqwnjovIkC4slWsDdxSKpi6FqtOtn9T7fig=' 'sha256-cvCizaXd8WYQn07jzI0T6S8DDf0Lp8CZ7QU/Kq08vUQ=' 'sha256-a0iDd5u6E8FnFXostFyCsZ2qyrNx+KANwf0I+2Kq3Ok=' 'sha256-0gektv1KBoEnk1AGWfVho7BrjVec0X9mhMzOqS4YLDQ=' 'sha256-yCeU+ieavYS9HSHFBM2JWiza/kaCcRB67EhXF3Er2KM=' 'sha256-bThWbXBrWf63BQRu+6OkZbCWiD1l8D89qyq/F4xhPFc=' 'sha256-xBUmyKwL95fuxHop+ZBxHqE5DoFggNsq4d7fLSjzIdE=' 'sha256-PzvtetGWgBaNrS+tg7XaJi4rHio8uJX/nIyrSkneA94=' 'sha256-zqwi0q5DXt+sR07OLC6lwcquPHNZ2tOQNoIHz22Yiag=' 'sha256-u0sRuxY3Blsy8/TpDRGFgOD4RJcnTMgmButVuR+wKsg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://api.coingecko.com https://api.dexscreener.com https://api.alternative.me https://data-api.binance.vision https://api.binance.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Meme Radar</title>
+<meta name="description" content="Live meme coin prices, alerts, exchange and backer news, and a checklist to run before you buy.">
+<meta name="theme-color" content="#e8ecf1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0f16" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ik1lbWUgUmFkYXIiPgogIDxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iOTYiIGZpbGw9IiMwYTBmMTYiLz4KICA8ZyBmaWxsPSJub25lIiBzdHJva2U9IiM3ZWExZmYiIHN0cm9rZS13aWR0aD0iMjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjY0IiBvcGFjaXR5PSIuOTUiLz4KICAgIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMTI0IiBvcGFjaXR5PSIuNiIvPgogICAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxODQiIG9wYWNpdHk9Ii4zIi8+CiAgPC9nPgogIDxwYXRoIGQ9Ik0yNTYgMjU2IEwzOTIgMTQ2IiBzdHJva2U9IiMzZGQ2OGMiIHN0cm9rZS13aWR0aD0iMjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxjaXJjbGUgY3g9IjM5MiIgY3k9IjE0NiIgcj0iMjIiIGZpbGw9IiMzZGQ2OGMiLz4KPC9zdmc+Cg==" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: a dealing board. Dense left-aligned tables on a cool grey ground, one signal-blue accent;
+   green, red and amber appear only where they mean gain, loss or caution. */
+:root{
+  --bg:#e8ecf1; --panel:#f6f8fa; --ink:#0d1b2a; --ink2:#394a5e; --muted:#5b6b7f; --line:#d2d9e1; --line2:#e3e8ee;
+  --accent:#1b4fd8; --accent-ink:#ffffff; --accent-soft:#dfe7fb;
+  --up:#0d7f49; --up-bg:#dff3e8; --down:#b8352b; --down-bg:#f8e1de; --warn:#8f5600; --warn-bg:#f8ebcf; --key:#d48806;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0f16; --panel:#111923; --ink:#e6edf5; --ink2:#b4c1d1; --muted:#8a9aae; --line:#233042; --line2:#1a2533;
+  --accent:#7ea1ff; --accent-ink:#0a0f16; --accent-soft:#1a2745;
+  --up:#3dd68c; --up-bg:#12301f; --down:#ff7f74; --down-bg:#3a1a17; --warn:#f2b84b; --warn-bg:#35280d; --key:#f2b84b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a0f16; --panel:#111923; --ink:#e6edf5; --ink2:#b4c1d1; --muted:#8a9aae; --line:#233042; --line2:#1a2533;
+  --accent:#7ea1ff; --accent-ink:#0a0f16; --accent-soft:#1a2745;
+  --up:#3dd68c; --up-bg:#12301f; --down:#ff7f74; --down-bg:#3a1a17; --warn:#f2b84b; --warn-bg:#35280d; --key:#f2b84b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 56px}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 24px;padding-bottom:14px}
+.brand h1{font-size:30px;font-weight:800;font-stretch:125%;letter-spacing:.01em;line-height:1}
+.brand p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none}
+.dot.live{background:var(--up)} .dot.err{background:var(--down)} .dot.wait{background:var(--warn)}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.strip>div{padding:10px 14px 10px 0}
+.strip>div+div{padding-left:14px;border-left:1px solid var(--line)}
+.lbl{font-family:var(--f-display);font-size:12px;font-weight:600;font-stretch:90%;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.big{font-family:var(--f-mono);font-size:22px;font-weight:500;line-height:1.25}
+.sub{font-size:12px;color:var(--muted)}
+.tabs{display:flex;flex-wrap:wrap;gap:2px 22px;margin:22px 0 14px;border-bottom:1px solid var(--line)}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:8px 0 9px;cursor:pointer;font-family:var(--f-display);font-weight:700;font-stretch:100%;font-size:16px;color:var(--muted)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.badge{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font:600 12px/20px var(--f-body);text-align:center}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:16px}
+.panel+.panel{margin-top:16px}
+.panel h2{font-size:18px;font-weight:700;margin-bottom:4px}
+.panel>.sub{margin:0 0 12px}
+.cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
+.cols>.panel+.panel{margin-top:0}
+.notice{border:1px solid var(--line);border-left:4px solid var(--warn);background:var(--warn-bg);padding:10px 12px;margin:0 0 12px;border-radius:2px}
+.notice.err{border-left-color:var(--down);background:var(--down-bg)}
+.notice p{margin:0}.notice p+p{margin-top:6px}
+.scroll{overflow-x:auto;position:relative}
+table{border-collapse:collapse;width:100%}
+th{font-family:var(--f-display);font-size:12px;font-weight:600;font-stretch:90%;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line2);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel);padding-left:0}
+th.l,td.l{text-align:left;white-space:normal}
+.sym{font-family:var(--f-display);font-weight:700;font-stretch:110%;font-size:15px}
+.nm{display:block;font-size:12px;color:var(--muted)}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--muted)}
+.rm{background:none;border:0;color:var(--muted);cursor:pointer;padding:2px 6px;font-size:16px;line-height:1}
+.pill{display:inline-block;padding:0 7px;margin:1px 4px 1px 0;border-radius:9px;font-size:12px;line-height:19px;background:var(--warn-bg);color:var(--warn);border:1px solid transparent}
+.pill.blue{background:var(--accent-soft);color:var(--accent)}
+.pill.red{background:var(--down-bg);color:var(--down)}
+.pill.green{background:var(--up-bg);color:var(--up)}
+.row-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.in{background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:6px 9px;min-width:0}
+.in.n{width:110px;font-family:var(--f-mono)}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:3px;padding:7px 14px;font-weight:600;cursor:pointer}
+.btn.ghost{background:none;color:var(--accent);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.dots .r{display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:10px;align-items:center;padding:3px 0}
+.track{position:relative;height:18px}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid var(--line)}
+.tick{position:absolute;top:0;bottom:0;border-left:1px solid var(--line)}
+.tick.key{border-left:2px solid var(--key)}
+.mk{position:absolute;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--panel)}
+.axis{display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:10px;font-size:12px;color:var(--muted)}
+.axis div{position:relative;height:16px}.axis span{position:absolute;transform:translateX(-50%)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chip{background:none;border:1px solid var(--line);border-radius:14px;padding:3px 12px;cursor:pointer;color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.feed{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:92px minmax(0,1fr);gap:4px 16px;padding:12px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item time{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding-top:3px}
+.item h3{font-size:16px;font-weight:700;font-stretch:100%}
+.item p{margin:4px 0 6px;max-width:68ch}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);align-items:center}
+.new{color:var(--accent);font-weight:600}
+.tiers{margin:0;padding:0;list-style:none}
+.tiers li{padding:8px 0;border-top:1px solid var(--line2)}
+.tiers li:first-child{border-top:0}
+.tiers b{font-family:var(--f-display);font-stretch:100%}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.form label{display:grid;gap:4px;font-size:13px;color:var(--ink2)}
+.form .in{width:100%}
+.verdict{border-left:5px solid var(--muted);padding:6px 0 6px 12px;margin-bottom:10px}
+.verdict.bad{border-color:var(--down)}.verdict.mid{border-color:var(--warn)}.verdict.ok{border-color:var(--up)}
+.verdict h3{font-size:20px;font-weight:800}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;padding:7px 0;border-top:1px solid var(--line2)}
+.log{list-style:none;margin:0;padding:0}
+.log li{display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px;padding:8px 0;border-top:1px solid var(--line2)}
+.log time{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+details{margin-top:10px}summary{cursor:pointer;color:var(--ink2)}
+.foot{margin-top:28px;color:var(--muted);font-size:12px;max-width:80ch}
+@media (max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}.item{grid-template-columns:minmax(0,1fr)}.brand h1{font-size:26px}}
+@media (max-width:600px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}.strip>div:nth-child(odd){padding-left:0;border-left:0}.strip>div:nth-child(even){padding-left:14px;border-left:1px solid var(--line)}.strip>div:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- additions for the standalone site ---------- */
+[hidden]{display:none!important}
+html,body{margin:0}
+body{min-height:100vh}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+code{font-family:var(--f-mono);font-size:.92em}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 12px}
+.toolbar h2{margin:0}
+.toolbar label{display:flex;align-items:center;gap:6px;color:var(--ink2)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.seg button{background:none;border:0;padding:5px 12px;cursor:pointer;color:var(--ink2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.notice.ok{border-left-color:var(--up);background:var(--up-bg)}
+.btn.sm{padding:3px 9px;font-size:13px}
+.addr{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.chk{display:flex;gap:8px;align-items:flex-start;color:var(--ink2)}
+.chk input{margin-top:4px}
+.res{border:1px solid var(--line);border-radius:3px;padding:12px;margin-top:12px;background:var(--bg)}
+.res h3{font-size:17px;font-weight:800}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 14px;margin:8px 0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-family:var(--f-mono)}
+.srcs td,.srcs th{white-space:normal}
+.srcs td:first-child,.srcs th:first-child{position:static}
+a.sym{text-decoration:none;color:inherit}
+a.sym:hover{text-decoration:underline}
+.dots .r,.axis{grid-template-columns:84px minmax(0,1fr) 56px}
+.log li.t{grid-template-columns:minmax(0,1fr) auto}
+.row-add .in{max-width:100%}
+.lnk{white-space:nowrap}
+@media (max-width:600px){.toolbar h2{width:100%}}
+
+/* ---------- fixes from the screenshot pass ---------- */
+.pill{white-space:nowrap}
+td.fl{min-width:185px}
+.checks li{grid-template-columns:78px minmax(0,1fr)}
+.c1{max-width:180px}
+.c1 .sym{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+.c1 .nm{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;overflow-wrap:anywhere}
+.c1 .addr{display:block}
+.lnk .btn{display:block;margin-top:6px}
+</style>
+<script>/* Applies the saved theme before first paint so the page does not flash. */
+(function () {
+  try {
+    var t = JSON.parse(localStorage.getItem("mr.theme"));
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<noscript><p style="padding:16px">Meme Radar needs JavaScript to load prices.</p></noscript>
+<div class="wrap">
+<header class="top">
+  <div class="brand">
+    <h1>MEME RADAR</h1>
+    <p>Live meme coin prices, alerts, exchange and backer news, and a checklist to run before you buy.</p>
+  </div>
+  <div class="status" role="status" aria-live="polite"><span class="dot wait" id="dot"></span><span id="stat">Loading prices…</span></div>
+</header>
+<div id="host-msg"></div>
+
+<section class="strip" aria-label="Whole market">
+  <div><div class="lbl">Crypto market cap</div><div class="big" id="g-cap">—</div><div class="sub" id="g-capchg">24h</div></div>
+  <div><div class="lbl">Meme sector cap</div><div class="big" id="g-meme">—</div><div class="sub" id="g-memechg">24h</div></div>
+  <div><div class="lbl">Fear &amp; Greed</div><div class="big" id="g-fg">—</div><div class="sub"><span id="g-fgl">0 fear, 100 greed</span> · <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a></div></div>
+  <div><div class="lbl">Bitcoin dominance</div><div class="big" id="g-btc">—</div><div class="sub">share of total cap</div></div>
+</section>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+  <button class="tab" role="tab" id="t-board" aria-selected="true" data-tab="board">Board</button>
+  <button class="tab" role="tab" id="t-launch" aria-selected="false" data-tab="launch">New launches</button>
+  <button class="tab" role="tab" id="t-signals" aria-selected="false" data-tab="signals">Signals<span class="badge" id="b-sig" hidden></span></button>
+  <button class="tab" role="tab" id="t-alerts" aria-selected="false" data-tab="alerts">Alerts<span class="badge" id="b-alert" hidden></span></button>
+  <button class="tab" role="tab" id="t-check" aria-selected="false" data-tab="check">Checklist</button>
+  <button class="tab" role="tab" id="t-settings" aria-selected="false" data-tab="settings">Settings</button>
+</nav>
+
+<main>
+<section id="p-board" role="tabpanel" aria-labelledby="t-board">
+  <div id="board-msg"></div>
+  <div class="panel">
+    <div class="toolbar">
+      <h2>Coins</h2>
+      <div class="seg" role="group" aria-label="Which list">
+        <button type="button" data-view="watch" aria-pressed="true">My watchlist</button>
+        <button type="button" data-view="top" aria-pressed="false">Top 30 meme coins</button>
+      </div>
+    </div>
+    <p class="sub" id="board-sub"></p>
+    <div class="scroll"><table id="tbl" aria-label="Meme coins"><thead><tr>
+      <th>Coin</th><th>Price</th><th>1h</th><th>24h</th><th>7d</th><th>30d</th><th>Market cap</th><th>24h volume</th><th>Turnover</th><th class="l">Flags</th><th><span class="sr">Watch or remove</span></th>
+    </tr></thead><tbody id="rows"></tbody></table></div>
+    <form class="row-add" id="add-form" autocomplete="off">
+      <label for="add-q" class="sub">Add a coin by name or symbol</label>
+      <input class="in" id="add-q" placeholder="e.g. WIF or Bonk" maxlength="40">
+      <button class="btn ghost" type="submit">Search</button>
+      <span class="sub" id="add-msg" role="status"></span>
+    </form>
+  </div>
+  <div class="cols" style="margin-top:16px">
+    <div class="panel">
+      <h2>Is it actually trading?</h2>
+      <p class="sub">Daily volume as a share of market cap, log scale. Coins left of the amber line trade so little that their market cap says little about what you could sell for.</p>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="panel">
+      <h2>What the flags mean</h2>
+      <ul class="tiers">
+        <li><span class="pill">Thin volume</span> 24h volume under 1% of market cap.</li>
+        <li><span class="pill">Hot</span> up 15% or more in 24h. Late buyers are often the exit liquidity.</li>
+        <li><span class="pill">Deep drawdown</span> down 30% or more over 30 days.</li>
+        <li><span class="pill">Unlock overhang</span> under 60% of total supply is circulating, so more can reach the market.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="p-launch" role="tabpanel" aria-labelledby="t-launch" hidden>
+  <div id="l-msg"></div>
+  <div class="panel">
+    <h2>New launches</h2>
+    <p class="sub">Tokens that recently got a profile page on <a href="https://dexscreener.com" target="_blank" rel="noopener">DexScreener</a>, with their trading pool data. That is not every new token, and a profile is not an endorsement. Flags are rules of thumb.</p>
+    <div class="notice"><p>Links inside a token's own profile (website, social accounts) are not shown. Whoever launched the token controls them, and fake verification pages that run commands on your computer have been hidden there. Open the token's DexScreener page instead.</p></div>
+    <div class="toolbar">
+      <label><input type="checkbox" id="l-hide" checked> Hide launches with a red flag</label>
+      <label>Chain <select class="in" id="l-chain"><option value="all">All chains</option></select></label>
+      <span class="sub" id="l-count" role="status"></span>
+    </div>
+    <div class="scroll"><table id="ltbl" aria-label="New launches"><thead><tr>
+      <th>Token</th><th class="l">Chain</th><th>Age</th><th>Pool</th><th>24h volume</th><th>Value (FDV)</th><th>24h</th><th>Buys / sells</th><th class="l">Flags</th><th><span class="sr">Actions</span></th>
+    </tr></thead><tbody id="l-rows"></tbody></table></div>
+  </div>
+  <div class="cols" style="margin-top:16px">
+    <div class="panel">
+      <h2>Check a token address</h2>
+      <p class="sub">Paste a contract address you were sent or saw in a post. This looks it up on DexScreener and runs the same flags.</p>
+      <form class="row-add" id="c-form" autocomplete="off">
+        <label for="c-addr" class="sr">Token address</label>
+        <input class="in" id="c-addr" placeholder="Token address" maxlength="120" style="flex:1 1 260px" spellcheck="false">
+        <button class="btn ghost" type="submit">Look up</button>
+      </form>
+      <div id="c-msg" class="sub" role="status"></div>
+      <div id="c-out"></div>
+    </div>
+    <div class="panel">
+      <h2>What the launch flags mean</h2>
+      <ul class="tiers">
+        <li><span class="pill red">Thin pool</span> under $25K in the trading pool. A few trades move the price a long way and you may not get out. <span class="pill">Small pool</span> is under $150K.</li>
+        <li><span class="pill red">Pool tiny vs value</span> the pool is under 0.5% of the headline value (<span class="pill">under 2%</span> is a warning). Most of that value cannot be sold into.</li>
+        <li><span class="pill red">No sells seen</span> at least 30 buys and no sells in 24h. Some tokens can be bought but not sold.</li>
+        <li><span class="pill">Under 24h old</span> <span class="pill">Sell-heavy</span> <span class="pill">Volume far above pool</span> <span class="pill">Down 50%+ today</span> are warnings, not verdicts.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="p-signals" role="tabpanel" aria-labelledby="t-signals" hidden>
+  <div class="cols">
+    <div class="panel">
+      <h2>News and backer signals</h2>
+      <p class="sub" id="feed-sub"></p>
+      <div class="chips" id="chips" role="group" aria-label="Filter by type"></div>
+      <ul class="feed" id="feed"></ul>
+    </div>
+    <div>
+      <div class="panel">
+        <h2>Binance new trading pairs</h2>
+        <p id="bn-msg"></p>
+        <ul class="log" id="bn-list"></ul>
+        <p class="sub"><a href="https://www.binance.com/en/support/announcement" target="_blank" rel="noopener">Binance announcements</a>. Announcements usually come before trading opens.</p>
+      </div>
+      <div class="panel">
+        <h2>Trending on CoinGecko</h2>
+        <p class="sub" id="trend-sub">What people are looking up right now. Attention is not quality.</p>
+        <ul class="log" id="trend"></ul>
+      </div>
+      <div class="panel">
+        <h2>What counts as backing</h2>
+        <ul class="tiers">
+          <li><b>Real access.</b> A spot listing on a large regulated venue (Binance, Coinbase, Robinhood, SoFi, Upbit) puts the coin in front of many more buyers. It does not stop it falling.</li>
+          <li><b>More leverage.</b> A futures listing adds traders who can be liquidated. Moves get bigger both ways.</li>
+          <li><b>Weak.</b> Binance Alpha is not a listing. A Seed Tag is a risk label. A press release saying a Binance listing is coming is marketing.</li>
+          <li><b>Not backing.</b> A name that mentions an exchange, or a caller's post. Wallets tied to callers have been alleged to trade first.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="p-alerts" role="tabpanel" aria-labelledby="t-alerts" hidden>
+  <div class="cols">
+    <div>
+      <div class="panel">
+        <h2>Alert log</h2>
+        <p class="sub">Rules are checked each time data refreshes. Alerts show here, on the tab title, and as a notification if you turn those on. <b>Nothing runs when this page is closed.</b></p>
+        <ul class="log" id="log"></ul>
+        <p><button class="btn ghost" id="log-clear" type="button">Clear log</button></p>
+      </div>
+      <div class="panel">
+        <h2>Notifications</h2>
+        <p id="n-state" role="status"></p>
+        <p class="row-add" style="margin-top:0"><button class="btn" id="n-btn" type="button">Turn on notifications</button> <button class="btn ghost" id="n-test" type="button">Send a test</button></p>
+        <p class="sub" id="n-help"></p>
+      </div>
+    </div>
+    <div>
+      <div class="panel">
+        <h2>Rules for every coin on your watchlist</h2>
+        <div class="form">
+          <label>Up in 24h by at least (%)<input class="in n" id="r-up" type="number" min="1" step="1"></label>
+          <label>Down in 24h by at least (%)<input class="in n" id="r-down" type="number" min="1" step="1"></label>
+          <label>Moves this much in 1h, either way (%)<input class="in n" id="r-hour" type="number" min="1" step="1"></label>
+        </div>
+        <p class="sub" style="margin:10px 0 0">Leave a box empty to turn that rule off.</p>
+      </div>
+      <div class="panel">
+        <h2>Launches and Binance</h2>
+        <p class="sub">These alert you to something new. They are filters you set, not recommendations.</p>
+        <label class="chk"><input type="checkbox" id="r-launch"> New launch under 7 days old with no red flag and a pool of at least</label>
+        <div class="row-add" style="margin-top:6px"><span class="sub">$</span><input class="in n" id="r-minliq" type="number" min="1000" step="1000" aria-label="Minimum pool in USD"></div>
+        <label class="chk" style="margin-top:12px"><input type="checkbox" id="r-bn"> A new USDT or USDC pair opens on Binance</label>
+      </div>
+      <div class="panel">
+        <h2>Price targets</h2>
+        <p class="sub">Fires once when the price crosses, then again only after it crosses back.</p>
+        <ul class="log" id="targets"></ul>
+        <form class="row-add" id="t-form">
+          <select class="in" id="t-coin" aria-label="Coin"></select>
+          <select class="in" id="t-dir" aria-label="Direction"><option value="above">rises above</option><option value="below">falls below</option></select>
+          <input class="in n" id="t-price" type="number" min="0" step="any" placeholder="USD" aria-label="Price in USD">
+          <button class="btn ghost" type="submit">Add target</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="p-check" role="tabpanel" aria-labelledby="t-check" hidden>
+  <div class="cols">
+    <div class="panel">
+      <h2>Before you buy a new coin</h2>
+      <p class="sub">Pool age, liquidity, volume and value fill in when you come from New launches. Holder share, mint authority and pool lock are not on DexScreener's pair data: look them up in a token scanner or holder map. Leave a box empty if you do not know it. Empty counts as a warning.</p>
+      <p class="sub" id="ck-from"></p>
+      <div class="form" id="ck-form">
+        <label>Age of the pool (hours)<input class="in n" id="k-age" type="number" min="0" step="any"></label>
+        <label>Liquidity (USD)<input class="in n" id="k-liq" type="number" min="0" step="any"></label>
+        <label>24h volume (USD)<input class="in n" id="k-vol" type="number" min="0" step="any"></label>
+        <label>Fully diluted value (USD)<input class="in n" id="k-fdv" type="number" min="0" step="any"></label>
+        <label>Top 10 wallets hold (% of supply, not counting the pool)<input class="in n" id="k-top" type="number" min="0" max="100" step="any"></label>
+        <label>Mint authority<select class="in" id="k-mint"><option value="">Don't know</option><option value="revoked">Revoked</option><option value="active">Still active</option></select></label>
+        <label>Liquidity pool<select class="in" id="k-lp"><option value="">Don't know</option><option value="burned">Burned</option><option value="locked">Locked</option><option value="open">Not locked</option></select></label>
+        <label>Test sell<select class="in" id="k-sell"><option value="">Not done</option><option value="yes">Sold a tiny amount fine</option></select></label>
+      </div>
+    </div>
+    <div class="panel" id="ck-out" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="p-settings" role="tabpanel" aria-labelledby="t-settings" hidden>
+  <div class="cols">
+    <div>
+      <div class="panel">
+        <h2>Appearance</h2>
+        <div class="seg" role="group" aria-label="Theme">
+          <button type="button" data-theme-set="auto" aria-pressed="true">Match my device</button>
+          <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+          <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>CoinGecko key (optional)</h2>
+        <p class="sub">Prices come from CoinGecko's free public API, which limits how often one browser can ask. If you see "rate limited" often, get a free Demo key from <a href="https://www.coingecko.com/en/api" target="_blank" rel="noopener">CoinGecko</a> and paste it here. It is stored only in this browser and sent only to CoinGecko. With a key, prices refresh every minute instead of every two.</p>
+        <form class="row-add" id="key-form" autocomplete="off">
+          <label for="key-in" class="sr">CoinGecko Demo key</label>
+          <input class="in" id="key-in" placeholder="CG-…" maxlength="80" style="flex:1 1 240px" spellcheck="false">
+          <button class="btn ghost" type="submit">Save</button>
+          <button class="btn ghost" type="button" id="key-clear">Remove</button>
+        </form>
+        <p class="sub" id="key-msg" role="status"></p>
+      </div>
+      <div class="panel">
+        <h2>Reset</h2>
+        <p class="sub">Clears your watchlist, rules, targets and alert log from this browser.</p>
+        <p><button class="btn ghost" id="reset-btn" type="button">Reset everything</button></p>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Data sources</h2>
+      <p class="sub">What each source last said. If something shows "could not reach", an ad blocker or network filter may be in the way.</p>
+      <div class="scroll"><table class="srcs" aria-label="Data sources"><thead><tr><th class="l">Source</th><th class="l">Status</th><th class="l">Last good</th></tr></thead><tbody id="src-rows"></tbody></table></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<p class="foot">Prices and rankings: <a href="https://www.coingecko.com/" target="_blank" rel="noopener">CoinGecko</a>. New pools: <a href="https://dexscreener.com" target="_blank" rel="noopener">DexScreener</a>. Fear &amp; Greed Index: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a>. Binance pairs: Binance public market data. All of it is for information only. Meme coins can go to zero, and most new ones do. This is not financial advice. Nothing here places a trade or connects to Fomo or any exchange or wallet, and you should never type a seed phrase or private key into any site. The news feed was read and dated by Claude on the day shown above it, and is refreshed by uploading a new <code>index.html</code>.</p>
+</div>
+<script>/* The news feed. To refresh it, replace this file with a new one from Claude.
+   BUILT is when the items were last read. v: "read" = article opened, "headline" = headline seen only. */
+var BUILT = "2026-10-23T21:30:00Z";
+var TAGS = ["Exchange","Backer","Rules","Risk","Data","Hype"];
+var SIGNALS = [
+{d:"2026-10-23",tag:"Data",c:["PEPE","FLOKI","BONK","SHIB"],v:"read",src:"CoinDesk",u:"https://www.coindesk.com/markets/2026/10/23/bitcoin-steadies-near-usd81-700-as-altcoins-rebound-pepe-climbs-13",
+ h:"Meme coins lead an altcoin rebound, with PEPE up about 13%",s:"CoinDesk says its memecoin gauge climbed 2.9%, led by PEPE (13% in the headline, 14% in the body text). FLOKI, BONK and SHIB rose between 3.3% and 4.9% on the day but remain down as much as 16% over the month. The article calls PEPE's move a run with no clear catalyst and puts its 24-hour volume at about $353 million."},
+{d:"2026-10-21",tag:"Exchange",c:["PENGU"],v:"read",src:"DailyCoin",u:"https://dailycoin.com/pengu-meme-coin-lands-on-sofi-whipping-up-8-gains",
+ h:"SoFi lists PENGU",s:"SoFi, a US online bank, now lets customers buy, sell and hold PENGU. The article puts SoFi at nearly 16M users. A CoinGecko post dated 20 Oct said PENGU was up 8.9% after the listing."},
+{d:"2026-10-21",tag:"Risk",c:["PUMP","TRUMP"],v:"read",src:"Crypto Times",u:"https://www.cryptotimes.io/2026/10/21/pump-fun-taps-meme-coin-trader-kimchi-for-creative-role-amid-scrutiny/",
+ h:"Pump.fun gives a pseudonymous trader a creative role, and scrutiny follows",s:"The article says a namesake token tied to the trader reportedly had one wallet holding about 75.32% of supply, and that his claim of about $40M in TRUMP profits is unverified."},
+{d:"2026-10-20",tag:"Data",c:["PUMP"],v:"read",src:"Crypto.news",u:"https://crypto.news/pump-fun-memecoin-trader-fatigue-token-survival/",
+ h:"79% of Pump.fun tokens traded only on launch day",s:"Bitquery tracked new Solana tokens from 1 Nov 2025 to 7 Oct 2026. Of 8,984,141 Pump.fun tokens, 1.5% traded at all in their fifth week and 0.2% had 10 or more trades. Launch-day-only shares were 51% on Meteora and 84% on Raydium LaunchLab. Counts include automated trades."},
+{d:"2026-10-19",tag:"Rules",c:["PUMP"],v:"read",src:"CoinPaprika",u:"https://coinpaprika.com/education/launchpad-tokens-securities-pump/",
+ h:"Court dismisses securities claims in the Pump.fun case; racketeering claims survive",s:"On 31 Aug 2026 Judge Colleen McMahon (SDNY) dismissed the securities claims in Aguilar v. Baton Corporation Ltd. because the two tokens did not meet the common-enterprise part of the Howey test. Racketeering claims continue against Baton and three co-founders. The explainer calls the ruling narrow and based only on the pleadings."},
+{d:"2026-10-16",tag:"Data",c:[],v:"read",src:"Phemex News",u:"https://phemex.com/news/article/meme-coin-speculation-cools-as-average-peak-hits-172-days-only-3-recover-ath-100093",
+ h:"Bloomberg analysis: most meme coins peak within weeks and few recover",s:"As reported by Phemex: projects hit their all-time high an average of 17.2 days after first trading, a quarter peak within 1.6 days, and only 3% ever recover their highs. The median time from peak to a 95% fall is 370 days. Sample size not stated."},
+{d:"2026-10-14",tag:"Risk",c:["PUMP"],v:"read",src:"Phemex News",u:"https://phemex.com/news/article/bubblemaps-alleges-frontrunning-ahead-of-anglios-calls-pumpfun-shifts-reward-model-99887",
+ h:"Bubblemaps alleges wallets tied to an influencer traded ahead of his calls",s:"Bubblemaps says five wallets linked to the influencer traded before about 61% of his 534 recommendations over two weeks. This is an allegation. Pump.fun separately said it is moving rewards toward follower profits over volume."},
+{d:"2026-10-10",tag:"Risk",c:[],v:"read",src:"Phemex News",u:"https://phemex.com/news/article/pumpfun-kol-0xethan-allegedly-profits-125k-through-coordinated-pumpanddump-scheme-99368",
+ h:"A second Bubblemaps allegation: a pump.fun influencer bought before recommending",s:"Bubblemaps alleges an influencer with about 88,000 followers bought tokens before recommending them and sold through linked accounts, across 49 promotions and about $125,000 of profit. Allegation only."},
+{d:"2026-10-04",tag:"Hype",c:[],v:"read",src:"Phemex News",u:"https://phemex.com/news/article/si-meme-coin-surges-past-50m-market-cap-after-musk-endorses-super-intelligence-98735",
+ h:"SI meme coin jumps after a Musk post",s:"SI passed a $50M market cap after Elon Musk wrote that SpaceX is a Super Intelligence company and that SI is better than AI. It rose more than 20% within an hour, then fell back to about $45M. The article does not name its blockchain."},
+{d:"2026-10-03",tag:"Risk",c:[],v:"read",src:"Phemex News",u:"https://phemex.com/news/article/microsoft-x-account-hacked-to-promote-clippy-meme-coin-before-tweets-deleted-98670",
+ h:"Microsoft's X account hijacked to promote a Clippy meme coin",s:"Posts for an unauthorized Clippy-themed token went out from Microsoft's official account and were deleted. A verified account posting a token is not proof the token is real."},
+{d:"2026-10-01",tag:"Hype",c:["TRUMP"],v:"read",src:"Cointelegraph",u:"https://cointelegraph.com/news/donald-trump-memecoin-dinner-corruption-claims",
+ h:"TRUMP holder dinner set for 22 November",s:"The third holder dinner is for the top 185 holders, ranked over a scoring period from 30 Sep to 12 Nov. TRUMP rose about 9% to $2.23 on the news. Earlier events drew 220 guests (May 2025) and 297 (Apr 2026)."},
+{d:"2026-09-28",tag:"Rules",c:[],v:"headline",src:"Cointelegraph",u:"https://cointelegraph.com/news/newsom-signs-california-ban-on-public-officials-issuing-memecoins",
+ h:"California bans public officials from issuing memecoins",s:"Governor Newsom signed the ban, per Cointelegraph's headline. I read the headline only."},
+{d:"2026-09-16",tag:"Risk",c:[],v:"read",src:"Crypto.news",u:"https://crypto.news/meme-coin-phishing-pages-trick-traders-with-fake-cloudflare-checks/",
+ h:"Fake Cloudflare checks hide in meme coin token pages",s:"Attackers put links to fake verification pages in a token's website field. The pages ask you to run commands that launch a malicious script. One trader said he lost about $600,000. Close any page that asks you to run a command, and treat links in token metadata as untrusted."},
+{d:"2026-09-11",tag:"Backer",c:["DOGE"],v:"read",src:"Cointelegraph",u:"https://cointelegraph.com/news/bitwise-put-down-dogecoin-etf-year-launch",
+ h:"Bitwise is closing its Dogecoin ETF",s:"The fund (BWOW), launched in November 2025, held about $688,000 in net assets on 9 Sep. Its last NYSE Arca trading day was expected on 14 Oct, with cash paid out around 22 Oct. Bitwise said it is optimising its product range."},
+{d:"2026-09-09",tag:"Exchange",c:["USELESS"],v:"headline",src:"Crypto.news",u:"https://crypto.news/upbit-drops-hemi-after-exploit-lists-cp-and-useless/",
+ h:"Upbit lists USELESS",s:"Headline only: Upbit dropped HEMI after an exploit and listed CP and USELESS. I could not open the article, so markets and timing are unconfirmed."},
+{d:"2026-09-07",tag:"Data",c:["PUMP"],v:"read",src:"Cointelegraph",u:"https://cointelegraph.com/news/fomo-pumpfun-revenue-app-solana",
+ h:"Fomo overtakes Pump.fun in daily revenue on Solana",s:"On one Friday, per DefiLlama, the Fomo social trading app earned $1.76M against Pump.fun's $1.1M. Over 30 days Pump.fun still led, at more than $57M against $17.6M."},
+{d:"2026-09-02",tag:"Exchange",c:["DOGE","SHIB","PEPE","BONK","WIF"],v:"read",src:"Crypto.news",u:"https://crypto.news/robinhood-memecoin-expansion-teased-by-ceo-vlad-tenev/",
+ h:"Robinhood's CEO teases a memecoin expansion",s:"Vlad Tenev replied to a post asking for memecoins on Robinhood with an ear emoji. Nothing was announced. Robinhood already offers DOGE, SHIB, PEPE, BONK and WIF to eligible US customers. Arkham counted $2.13M of fees on Robinhood Chain in one 24h snapshot, more than Solana, Ethereum or Base, mainly from memecoin trading."}
+];
+</script>
+<script>/* Defaults. Ids are CoinGecko ids. */
+var DEFAULT_COINS = [
+  {id:"dogecoin",sym:"DOGE",name:"Dogecoin"},
+  {id:"shiba-inu",sym:"SHIB",name:"Shiba Inu"},
+  {id:"pepe",sym:"PEPE",name:"Pepe"},
+  {id:"bonk",sym:"BONK",name:"Bonk"},
+  {id:"dogwifcoin",sym:"WIF",name:"dogwifhat"},
+  {id:"pudgy-penguins",sym:"PENGU",name:"Pudgy Penguins"},
+  {id:"official-trump",sym:"TRUMP",name:"Official Trump"},
+  {id:"floki",sym:"FLOKI",name:"FLOKI"},
+  {id:"fartcoin",sym:"FARTCOIN",name:"Fartcoin"},
+  {id:"spx6900",sym:"SPX",name:"SPX6900"},
+  {id:"pump-fun",sym:"PUMP",name:"Pump.fun"},
+  {id:"useless-3",sym:"USELESS",name:"Useless Coin"}
+];
+var MAX_COINS = 40;
+var DEFAULT_RULES = {up:15, down:15, hour:10, launch:true, minLiq:150000, bn:true, targets:[]};
+</script>
+<script>/* Pure helpers: no DOM, no network, no storage. Tested in Node. */
+(function (root) {
+"use strict";
+
+function num(x){ return (x===null||x===undefined||x==="") ? NaN : Number(x); }
+function firstFinite(){ for(var i=0;i<arguments.length;i++){ var v=num(arguments[i]); if(isFinite(v)) return v; } return NaN; }
+function esc(s){
+  return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+}
+
+/* ---------- formatting (fmtPrice returns HTML: it contains a <sub>) ---------- */
+function fmtPrice(p){
+  p=num(p);
+  if(!isFinite(p)||p<=0) return "—";
+  if(p>=1000) return "$"+Math.round(p).toLocaleString("en-US");
+  if(p>=1) return "$"+p.toFixed(2);
+  if(p>=0.1) return "$"+p.toFixed(4);
+  if(p>=0.001) return "$"+p.toPrecision(4);
+  var e=p.toExponential(3).split("e");
+  return "$0.0<sub>"+(-parseInt(e[1],10)-1)+"</sub>"+e[0].replace(".","");
+}
+function fmtUsd(n){
+  n=num(n);
+  if(!isFinite(n)) return "—";
+  if(n>=1e12) return "$"+(n/1e12).toFixed(2)+"T";
+  if(n>=1e9) return "$"+(n/1e9).toFixed(n>=1e11?0:2)+"B";
+  if(n>=1e6) return "$"+(n/1e6).toFixed(n>=1e8?0:1)+"M";
+  if(n>=1e3) return "$"+Math.round(n/1e3)+"K";
+  return "$"+n.toFixed(0);
+}
+function fmtPct(x){
+  x=num(x);
+  if(!isFinite(x)) return {text:"—",cls:"flat"};
+  var a=Math.abs(x);
+  if(a<0.005) return {text:"0.00%",cls:"flat"};
+  return {text:(x>0?"▲ ":"▼ ")+a.toFixed(a>=100?0:2)+"%",cls:x>0?"up":"down"};
+}
+
+/* Plain-text price for alert messages. Never uses exponent notation. */
+function plainPrice(p){
+  p=num(p);
+  if(!isFinite(p)||p<=0) return "—";
+  var digits=p>=1?4:Math.min(18,3-Math.floor(Math.log10(p)));
+  return p.toFixed(digits).replace(/(\.\d*?)0+$/,"$1").replace(/\.$/,"");
+}
+
+/* ---------- coins ---------- */
+function turnoverOf(r){
+  var v=num(r.volume_24h), m=num(r.market_cap);
+  return (isFinite(v)&&isFinite(m)&&m>0)?v/m:NaN;
+}
+function logPos(t){
+  var v=Math.log10(Math.max(t*100,0.1));
+  return Math.min(1,Math.max(0,(v+1)/3));
+}
+function flagsFor(r){
+  var f=[], t=turnoverOf(r);
+  if(isFinite(t)&&t<0.01) f.push("Thin volume");
+  if(num(r.percent_change_24h)>=15) f.push("Hot");
+  if(num(r.percent_change_30d)<=-30) f.push("Deep drawdown");
+  var circ=num(r.circulating_supply);
+  var tot=num(r.max_supply); if(!(tot>0)) tot=num(r.total_supply);
+  if(circ>0&&tot>0&&circ/tot<0.6) f.push("Unlock overhang");
+  return f;
+}
+/* A CoinGecko id is lowercase letters, digits, dot, dash or underscore. Anything else is dropped. */
+function cgSeg(s){ s=String(s==null?"":s); return /^[A-Za-z0-9._-]{1,80}$/.test(s)?s:""; }
+
+/* One CoinGecko /coins/markets entry to the row shape the board uses. */
+function normCG(c){
+  if(!c||typeof c!=="object"||!cgSeg(c.id)) return null;
+  return {
+    id:String(c.id), symbol:String(c.symbol||"").toUpperCase().slice(0,20), name:String(c.name||c.id).slice(0,60),
+    price:num(c.current_price), rank:num(c.market_cap_rank),
+    market_cap:num(c.market_cap), fdv:num(c.fully_diluted_valuation), volume_24h:num(c.total_volume),
+    percent_change_1h:num(c.price_change_percentage_1h_in_currency),
+    percent_change_24h:firstFinite(c.price_change_percentage_24h_in_currency,c.price_change_percentage_24h),
+    percent_change_7d:num(c.price_change_percentage_7d_in_currency),
+    percent_change_30d:num(c.price_change_percentage_30d_in_currency),
+    circulating_supply:num(c.circulating_supply), total_supply:num(c.total_supply), max_supply:num(c.max_supply),
+    last_updated_time:c.last_updated||null
+  };
+}
+function parseMarkets(json){ return Array.isArray(json)?json.map(normCG).filter(Boolean):[]; }
+
+/* ---------- stored settings: never trust what comes back out of storage ---------- */
+function sanitizeCoins(arr){
+  if(!Array.isArray(arr)) return null;
+  var seen={}, out=[];
+  arr.forEach(function(c){
+    if(!c||typeof c!=="object") return;
+    var id=cgSeg(c.id); if(!id||seen[id]) return;
+    seen[id]=1;
+    out.push({id:id, sym:String(c.sym||"").slice(0,20)||id.toUpperCase().slice(0,12), name:String(c.name||id).slice(0,60)});
+  });
+  return (out.length||arr.length===0) ? out : null;
+}
+function sanitizeRules(o, d){
+  o=(o&&typeof o==="object")?o:{};
+  function pos(v,def){ if(v===null) return null; v=num(v); return (isFinite(v)&&v>0)?v:def; }
+  var r={
+    up:pos(o.up,d.up), down:pos(o.down,d.down), hour:pos(o.hour,d.hour),
+    launch:typeof o.launch==="boolean"?o.launch:d.launch, minLiq:pos(o.minLiq,d.minLiq)||d.minLiq,
+    bn:typeof o.bn==="boolean"?o.bn:d.bn, targets:[]
+  };
+  if(Array.isArray(o.targets)) o.targets.forEach(function(t){
+    if(!t||typeof t!=="object") return;
+    var id=cgSeg(t.id), price=num(t.price);
+    if(id&&isFinite(price)&&price>0&&(t.dir==="above"||t.dir==="below")) r.targets.push({id:id,sym:String(t.sym||id).slice(0,20),dir:t.dir,price:price});
+  });
+  return r;
+}
+
+/* ---------- alerts: fire once per crossing, then again only after the condition clears ---------- */
+function evaluateAlerts(rows, rules, fired){
+  var out=[], next=Object.assign({}, fired||{});
+  function check(key, cond, text){
+    if(cond&&!next[key]) out.push({key:key,text:text});
+    next[key]=!!cond;
+  }
+  rows.forEach(function(r){
+    var id=String(r.id), s=r.symbol, c=num(r.percent_change_24h), h=num(r.percent_change_1h), p=num(r.price);
+    if(isFinite(c)&&rules.up>0) check(id+":up", c>=rules.up, s+" is up "+c.toFixed(1)+"% in 24h (your rule: "+rules.up+"%)");
+    if(isFinite(c)&&rules.down>0) check(id+":down", c<=-rules.down, s+" is down "+Math.abs(c).toFixed(1)+"% in 24h (your rule: "+rules.down+"%)");
+    if(isFinite(h)&&rules.hour>0){
+      check(id+":h-up", h>=rules.hour, s+" is up "+h.toFixed(1)+"% in the last hour (your rule: "+rules.hour+"%)");
+      check(id+":h-down", h<=-rules.hour, s+" is down "+Math.abs(h).toFixed(1)+"% in the last hour (your rule: "+rules.hour+"%)");
+    }
+    (rules.targets||[]).forEach(function(t){
+      if(String(t.id)!==id||!isFinite(p)) return;
+      var hit=t.dir==="above"?p>=t.price:p<=t.price;
+      check("t:"+id+":"+t.dir+":"+t.price, hit, s+" "+(t.dir==="above"?"rose above":"fell below")+" your target of $"+plainPrice(t.price));
+    });
+  });
+  return {alerts:out, fired:next};
+}
+
+/* ---------- the eight-point checklist ---------- */
+function evaluateChecklist(i){
+  var checks=[], n=function(k){ return num(i[k]); };
+  function add(name,s,text){ checks.push({name:name,s:s,text:text}); }
+  var liq=n("liq"), fdv=n("fdv"), vol=n("vol"), age=n("age"), top=n("top");
+  if(!isFinite(liq)) add("Liquidity","unknown","Not entered.");
+  else if(liq<25000) add("Liquidity","fail","Under $25K. A few trades can move the price a long way and you may not get out.");
+  else if(liq<150000) add("Liquidity","warn","Under $150K. Larger sells will cost you.");
+  else add("Liquidity","pass","$150K or more in the pool.");
+  if(!isFinite(liq)||!isFinite(fdv)||fdv<=0) add("Pool vs value","unknown","Needs liquidity and fully diluted value.");
+  else if(liq/fdv<0.005) add("Pool vs value","fail","The pool is under 0.5% of fully diluted value, so most of the headline value is out of reach.");
+  else if(liq/fdv<0.02) add("Pool vs value","warn","The pool is under 2% of fully diluted value.");
+  else add("Pool vs value","pass","The pool is 2% or more of fully diluted value.");
+  if(!isFinite(liq)||!isFinite(vol)||liq<=0) add("Volume vs pool","unknown","Needs 24h volume and liquidity.");
+  else if(vol/liq>25) add("Volume vs pool","warn","Volume is over 25 times the pool. That often means bots or wash trading.");
+  else if(vol/liq<0.2) add("Volume vs pool","warn","Very little trading compared with the pool.");
+  else add("Volume vs pool","pass","Volume is in a normal range for the pool.");
+  if(!isFinite(age)) add("Age","unknown","Not entered.");
+  else if(age<24) add("Age","warn","Under a day old. As reported, a Bloomberg analysis found a quarter of meme coins peak within 1.6 days.");
+  else add("Age","pass","More than a day old.");
+  if(!isFinite(top)) add("Top 10 wallets","unknown","Not entered.");
+  else if(top>50) add("Top 10 wallets","fail","Ten wallets hold more than half the supply. They can sell into you.");
+  else if(top>30) add("Top 10 wallets","warn","Ten wallets hold over 30% of supply.");
+  else add("Top 10 wallets","pass","Ten wallets hold 30% or less.");
+  if(i.mint==="active") add("Mint authority","fail","The creator can still print more supply.");
+  else if(i.mint==="revoked") add("Mint authority","pass","Revoked, so supply cannot be increased.");
+  else add("Mint authority","unknown","Not checked.");
+  if(i.lp==="open") add("Liquidity pool","fail","Unlocked liquidity can be pulled by whoever holds it (a rug pull).");
+  else if(i.lp==="burned"||i.lp==="locked") add("Liquidity pool","pass","Burned or locked.");
+  else add("Liquidity pool","unknown","Not checked.");
+  if(i.sell==="yes") add("Test sell","pass","A tiny sell went through.");
+  else add("Test sell","warn","Not done. Some tokens can be bought but not sold. Try a tiny sell first.");
+  var fails=checks.filter(function(c){return c.s==="fail";}).length;
+  var weak=checks.filter(function(c){return c.s==="warn"||c.s==="unknown";}).length;
+  var answered=checks.filter(function(c){return c.s!=="unknown";}).length;
+  var v;
+  var anyInput=[liq,fdv,vol,age,top].some(isFinite)||i.mint||i.lp||i.sell;
+  if(!anyInput) v={cls:"",title:"Nothing entered yet",text:"Each answer you fill in runs one check."};
+  else if(fails) v={cls:"bad",title:"Fails basic checks",text:fails+" of 8 checks failed. Treat this as a coin you may not be able to get out of, whatever the chart does."};
+  else if(weak>=4) v={cls:"mid",title:"Too many unknowns",text:weak+" checks are open or flagged. Find the missing answers before you decide."};
+  else if(weak>=1) v={cls:"mid",title:"Passes, with warnings",text:weak+" check"+(weak>1?"s are":" is")+" open or flagged."};
+  else v={cls:"ok",title:"Passes basic checks",text:"All 8 checks passed."};
+  return {verdict:v,checks:checks,answered:answered};
+}
+
+/* ---------- polling ---------- */
+/* Wait before the next try. First failure waits the normal interval; each further one doubles it, up to max. */
+function backoffMs(fails, base, max, retryAfter){
+  var f=Math.max(0, fails|0);
+  var d=f<=0 ? base : Math.min(max, base*Math.pow(2,f-1));
+  return Math.max(d, retryAfter>0?retryAfter:0);
+}
+
+var Lib={num:num,firstFinite:firstFinite,esc:esc,fmtPrice:fmtPrice,fmtUsd:fmtUsd,fmtPct:fmtPct,plainPrice:plainPrice,turnoverOf:turnoverOf,logPos:logPos,
+  flagsFor:flagsFor,cgSeg:cgSeg,normCG:normCG,parseMarkets:parseMarkets,sanitizeCoins:sanitizeCoins,sanitizeRules:sanitizeRules,
+  evaluateAlerts:evaluateAlerts,evaluateChecklist:evaluateChecklist,backoffMs:backoffMs};
+if(typeof module!=="undefined"&&module.exports) module.exports=Lib; else root.Lib=Lib;
+})(typeof window!=="undefined"?window:this);
+</script>
+<script>/* Helpers for DexScreener pool data and Binance pair lists. Pure: no DOM, no network, no storage. */
+(function (root) {
+"use strict";
+var Lib = (typeof module!=="undefined"&&module.exports) ? require("./lib.js") : root.Lib;
+var num = Lib.num;
+
+var CHAINS = {solana:"Solana",ethereum:"Ethereum",base:"Base",bsc:"BNB Chain",arbitrum:"Arbitrum",polygon:"Polygon",
+  avalanche:"Avalanche",optimism:"Optimism",sui:"Sui",ton:"TON",tron:"Tron",pulsechain:"PulseChain"};
+function chainName(id){ id=String(id||""); return CHAINS[id] || (id ? id.charAt(0).toUpperCase()+id.slice(1) : "?"); }
+
+/* Only letters, digits, dash and underscore may go into a URL path built from API data. */
+function safeSeg(s){ s=String(s==null?"":s); return /^[A-Za-z0-9_-]{1,100}$/.test(s)?s:""; }
+function dexUrl(chain, pair){ var c=safeSeg(chain), p=safeSeg(pair); return (c&&p)?"https://dexscreener.com/"+c+"/"+p:"https://dexscreener.com/"; }
+function validAddress(a){ return /^[A-Za-z0-9]{25,100}$/.test(String(a==null?"":a).trim()); }
+function shortAddr(a){ a=String(a||""); return a.length>14 ? a.slice(0,5)+"…"+a.slice(-4) : a; }
+
+function fmtAge(h){
+  h=num(h);
+  if(!isFinite(h)) return "—";
+  if(h<1) return Math.max(1,Math.round(h*60))+"m";
+  if(h<48) return Math.round(h)+"h";
+  if(h<24*60) return Math.round(h/24)+"d";
+  return Math.round(h/24/30)+"mo";
+}
+
+/* One DexScreener pair to the row shape the launches table uses. Names and symbols are set by whoever launched the token. */
+function normPair(p, now){
+  if(!p||typeof p!=="object"||!p.baseToken||typeof p.baseToken!=="object") return null;
+  var chain=safeSeg(p.chainId), pair=safeSeg(p.pairAddress);
+  if(!chain||!pair) return null;
+  var tx=(p.txns&&p.txns.h24)||{};
+  var created=num(p.pairCreatedAt);
+  return {
+    chain:chain, dex:String(p.dexId||"").slice(0,30), pair:pair, addr:String(p.baseToken.address||"").slice(0,100),
+    symbol:String(p.baseToken.symbol||"?").slice(0,24), name:String(p.baseToken.name||"").slice(0,60),
+    quote:String((p.quoteToken&&p.quoteToken.symbol)||"").slice(0,16),
+    price:num(p.priceUsd), liq:num(p.liquidity&&p.liquidity.usd), vol24:num(p.volume&&p.volume.h24),
+    fdv:num(p.fdv), mcap:num(p.marketCap), chg24:num(p.priceChange&&p.priceChange.h24), chg1h:num(p.priceChange&&p.priceChange.h1),
+    buys:num(tx.buys), sells:num(tx.sells), created:created,
+    ageH:isFinite(created)?Math.max(0,(now-created)/3600000):NaN
+  };
+}
+function valueOf(r){ return (isFinite(r.fdv)&&r.fdv>0) ? r.fdv : r.mcap; }
+
+/* Flags are rules of thumb. lv is "red" (likely trouble) or "amber" (look closer). */
+function flags(r){
+  var f=[], val=valueOf(r);
+  if(!isFinite(r.liq)) f.push({t:"No pool data",lv:"amber"});
+  else if(r.liq<25000) f.push({t:"Thin pool",lv:"red"});
+  else if(r.liq<150000) f.push({t:"Small pool",lv:"amber"});
+  if(isFinite(r.liq)&&r.liq>0&&isFinite(val)&&val>0){
+    var ratio=r.liq/val;
+    if(ratio<0.005) f.push({t:"Pool tiny vs value",lv:"red"});
+    else if(ratio<0.02) f.push({t:"Pool small vs value",lv:"amber"});
+  }
+  if(isFinite(r.ageH)&&r.ageH<24) f.push({t:"Under 24h old",lv:"amber"});
+  if(isFinite(r.buys)&&isFinite(r.sells)){
+    if(r.sells===0&&r.buys>=30) f.push({t:"No sells seen",lv:"red"});
+    else if(r.buys+r.sells>=50&&r.sells>=1.5*r.buys) f.push({t:"Sell-heavy",lv:"amber"});
+  }
+  if(isFinite(r.liq)&&r.liq>0&&isFinite(r.vol24)&&r.vol24/r.liq>25) f.push({t:"Volume far above pool",lv:"amber"});
+  if(isFinite(r.chg24)&&r.chg24<=-50) f.push({t:"Down 50%+ today",lv:"amber"});
+  return f;
+}
+function hasRed(fl){ return fl.some(function(x){ return x.lv==="red"; }); }
+
+/* Keep only pools where the wanted token is the one being traded, and take the deepest pool for each token. */
+function launchRows(pairs, wanted, now){
+  var want={}; (wanted||[]).forEach(function(a){ want[String(a).toLowerCase()]=1; });
+  var by={}, order=[];
+  (Array.isArray(pairs)?pairs:[]).forEach(function(p){
+    var r=normPair(p, now);
+    if(!r||!r.addr||!want[r.addr.toLowerCase()]) return;
+    var k=r.chain+":"+r.addr.toLowerCase();
+    if(!by[k]){ by[k]=r; order.push(k); }
+    else if((isFinite(r.liq)?r.liq:-1)>(isFinite(by[k].liq)?by[k].liq:-1)) by[k]=r;
+  });
+  return order.map(function(k){ return by[k]; });
+}
+function sortNewest(rows){
+  return rows.slice().sort(function(a,b){
+    var x=isFinite(a.created)?a.created:-Infinity, y=isFinite(b.created)?b.created:-Infinity;
+    return y-x;
+  });
+}
+
+/* Group profile entries by chain. At most `cap` addresses per chain (the API takes 30) and `maxChains` chains. */
+function groupProfiles(list, cap, maxChains){
+  var by={}, order=[];
+  (Array.isArray(list)?list:[]).forEach(function(p){
+    if(!p||typeof p!=="object") return;
+    var c=safeSeg(p.chainId), a=safeSeg(p.tokenAddress);
+    if(!c||!a) return;
+    if(!by[c]){ by[c]=[]; order.push(c); }
+    if(by[c].indexOf(a)<0&&by[c].length<cap) by[c].push(a);
+  });
+  order.sort(function(x,y){ return by[y].length-by[x].length; });
+  return order.slice(0,maxChains).map(function(c){ return {chain:c, addrs:by[c]}; });
+}
+
+/* Keep the newest n keys of a seen-set. Insertion order is preserved for non-numeric keys. */
+function capKeys(obj, n){
+  var keys=Object.keys(obj);
+  if(keys.length<=n) return obj;
+  var out={}; keys.slice(keys.length-n).forEach(function(k){ out[k]=1; });
+  return out;
+}
+
+/* New launches worth telling the user about: not seen before, young, no red flag, pool at least minLiq. First call only seeds. */
+function newLaunchAlerts(rows, seen, minLiq){
+  var next=Object.assign({}, seen||{}), first=!seen||!Object.keys(seen).length, out=[];
+  rows.forEach(function(r){
+    var k=r.chain+":"+String(r.addr).toLowerCase();
+    if(next[k]) return;
+    next[k]=1;
+    if(first) return;
+    if(!hasRed(flags(r))&&r.ageH<168&&r.liq>=minLiq) out.push(r);
+  });
+  return {alerts:out, seen:capKeys(next,400), seeded:first};
+}
+
+/* ---------- Binance ---------- */
+function splitPair(sym){
+  var m=/^([A-Z0-9]{2,20}?)(USDT|USDC)$/.exec(String(sym));
+  return m?{base:m[1],quote:m[2]}:null;
+}
+function parseTicker(json){
+  var out=[];
+  if(!Array.isArray(json)) return out;
+  json.forEach(function(x){ if(x&&typeof x.symbol==="string"&&splitPair(x.symbol)) out.push(x.symbol); });
+  return out;
+}
+/* Symbols never seen before. The first call (empty seen) only seeds the list. A pair that disappears and returns is not new. */
+function diffPairs(seen, symbols){
+  var next=Object.assign({}, seen||{}), first=!seen||!Object.keys(seen).length, fresh=[];
+  symbols.forEach(function(s){
+    if(next[s]) return;
+    next[s]=1;
+    if(first) return;
+    var p=splitPair(s);
+    if(p) fresh.push({symbol:s,base:p.base,quote:p.quote});
+  });
+  return {fresh:fresh, seen:capKeys(next,5000), seeded:first};
+}
+function groupFresh(fresh){
+  var by={}, order=[];
+  fresh.forEach(function(f){
+    if(!by[f.base]){ by[f.base]={base:f.base,quotes:[]}; order.push(f.base); }
+    if(by[f.base].quotes.indexOf(f.quote)<0) by[f.base].quotes.push(f.quote);
+  });
+  return order.map(function(b){ return by[b]; });
+}
+
+var Dex={chainName:chainName,safeSeg:safeSeg,dexUrl:dexUrl,validAddress:validAddress,shortAddr:shortAddr,fmtAge:fmtAge,
+  normPair:normPair,valueOf:valueOf,flags:flags,hasRed:hasRed,launchRows:launchRows,sortNewest:sortNewest,groupProfiles:groupProfiles,
+  capKeys:capKeys,newLaunchAlerts:newLaunchAlerts,splitPair:splitPair,parseTicker:parseTicker,diffPairs:diffPairs,groupFresh:groupFresh};
+if(typeof module!=="undefined"&&module.exports) module.exports=Dex; else root.Dex=Dex;
+})(typeof window!=="undefined"?window:this);
+</script>
+<script>/* Network layer. Each call returns parsed data or throws an ApiError.
+   A fake fetch can be passed in, which is how the tests run without the network. */
+(function (root) {
+"use strict";
+var isNode = typeof module!=="undefined"&&module.exports;
+var Lib = isNode ? require("./lib.js") : root.Lib;
+var Dex = isNode ? require("./dex.js") : root.Dex;
+
+var CG="https://api.coingecko.com/api/v3", DX="https://api.dexscreener.com", FNG="https://api.alternative.me/fng/";
+var BN=["https://data-api.binance.vision","https://api.binance.com"];
+
+function ApiError(source, kind, status, retryAfterMs){
+  this.name="ApiError"; this.source=source; this.kind=kind; this.status=status||0; this.retryAfterMs=retryAfterMs||0;
+  this.message=source+" "+kind+(status?" "+status:"");
+}
+ApiError.prototype=Object.create(Error.prototype);
+ApiError.prototype.constructor=ApiError;
+
+var NAMES={coingecko:"CoinGecko",dexscreener:"DexScreener",feargreed:"The Fear & Greed Index",binance:"Binance"};
+/* Plain-English text for a failed call. */
+function explain(err){
+  var src=err&&err.source, n=NAMES[src]||"The data source";
+  switch(err&&err.kind){
+    case "rate": return n+" is rate limiting this browser, so this page is waiting before it asks again."+(src==="coingecko"?" A free CoinGecko key in Settings raises the limit.":"");
+    case "auth": return src==="coingecko" ? "CoinGecko refused the request. If you entered a key in Settings, check it."
+      : n+" refused the request"+(src==="binance"?" (it may block your region)":"")+".";
+    case "server": return n+" is having problems ("+err.status+"). This page tries again soon.";
+    case "timeout": return n+" took too long to answer. This page tries again soon.";
+    case "network": return "Could not reach "+n+". Check your connection, or an ad blocker or network filter. This page tries again soon.";
+    case "bad": return n+" sent something this page could not read. This page tries again soon.";
+    default: return n+" returned an error"+(err&&err.status?" ("+err.status+")":"")+". This page tries again soon.";
+  }
+}
+
+/* ---------- parsers for the small endpoints ---------- */
+function parseGlobal(j){
+  var d=j&&j.data;
+  if(!d||typeof d!=="object") return null;
+  return {cap:Lib.num(d.total_market_cap&&d.total_market_cap.usd), chg:Lib.num(d.market_cap_change_percentage_24h_usd),
+    btc:Lib.num(d.market_cap_percentage&&d.market_cap_percentage.btc)};
+}
+function parseCategories(j){
+  if(!Array.isArray(j)) return null;
+  var m=j.filter(function(c){ return c&&c.id==="meme-token"; })[0];
+  return m?{cap:Lib.num(m.market_cap), chg:Lib.num(m.market_cap_change_24h)}:null;
+}
+function parseFng(j){
+  var d=j&&Array.isArray(j.data)&&j.data[0];
+  if(!d) return null;
+  var v=Lib.num(d.value);
+  return isFinite(v)?{value:v, label:String(d.value_classification||"").slice(0,30)}:null;
+}
+function parseSearch(j){
+  var a=(j&&Array.isArray(j.coins))?j.coins:[];
+  return a.slice(0,6).map(function(c){
+    var id=c&&Lib.cgSeg(c.id);
+    return id?{id:id, sym:String(c.symbol||"").toUpperCase().slice(0,20), name:String(c.name||id).slice(0,60), rank:Lib.num(c.market_cap_rank)}:null;
+  }).filter(Boolean);
+}
+function parseTrending(j){
+  var a=(j&&Array.isArray(j.coins))?j.coins:[];
+  return a.slice(0,7).map(function(w){
+    var c=w&&w.item, id=c&&Lib.cgSeg(c.id);
+    if(!id) return null;
+    var d=c.data&&c.data.price_change_percentage_24h;
+    return {id:id, sym:String(c.symbol||"").toUpperCase().slice(0,20), name:String(c.name||id).slice(0,60),
+      rank:Lib.num(c.market_cap_rank), chg24:(d&&typeof d==="object")?Lib.num(d.usd):Lib.num(d)};
+  }).filter(Boolean);
+}
+
+/* ---------- the client ---------- */
+function make(opts){
+  opts=opts||{};
+  var fetchFn=opts.fetch||function(u,o){ return root.fetch(u,o); };
+  var getKey=opts.getKey||function(){ return ""; };
+  var timeoutMs=opts.timeoutMs||12000;
+  var gapMs=opts.gapMs===undefined?1500:opts.gapMs;
+  var chain=Promise.resolve(), lastAt=0;
+
+  /* CoinGecko calls go one at a time with a gap between them, so a burst of refreshes cannot trip its limit. */
+  function gated(fn){
+    var run=chain.then(function(){
+      var wait=Math.max(0,lastAt+gapMs-Date.now());
+      return wait?new Promise(function(r){ setTimeout(r,wait); }):null;
+    }).then(function(){ lastAt=Date.now(); return fn(); });
+    chain=run.then(function(){},function(){});
+    return run;
+  }
+  function retryAfter(res){
+    try{
+      var n=Number(res.headers&&res.headers.get&&res.headers.get("retry-after"));
+      return (isFinite(n)&&n>0)?Math.min(n,600)*1000:0;
+    }catch(e){ return 0; }
+  }
+  async function getJson(source,url){
+    var ctl=(typeof AbortController!=="undefined")?new AbortController():null;
+    var timer=ctl?setTimeout(function(){ ctl.abort(); },timeoutMs):null;
+    var res;
+    try{ res=await fetchFn(url, ctl?{signal:ctl.signal}:undefined); }
+    catch(e){ throw new ApiError(source,(e&&e.name==="AbortError")?"timeout":"network",0,0); }
+    finally{ if(timer) clearTimeout(timer); }
+    if(res.status===429) throw new ApiError(source,"rate",429,retryAfter(res));
+    if(res.status===401||res.status===403||res.status===451) throw new ApiError(source,"auth",res.status,0);
+    if(!res.ok) throw new ApiError(source,res.status>=500?"server":"http",res.status,retryAfter(res));
+    try{ return await res.json(); }catch(e){ throw new ApiError(source,"bad",res.status,0); }
+  }
+  function cgUrl(path,params){
+    var q=new URLSearchParams();
+    Object.keys(params||{}).forEach(function(k){ q.set(k,params[k]); });
+    var key=String(getKey()||"").trim();
+    if(/^[A-Za-z0-9_-]{8,100}$/.test(key)) q.set("x_cg_demo_api_key",key);
+    var s=q.toString();
+    return CG+path+(s?"?"+s:"");
+  }
+  function cg(path,params){ return gated(function(){ return getJson("coingecko",cgUrl(path,params)); }); }
+  function marketsFrom(j){
+    if(!Array.isArray(j)) throw new ApiError("coingecko","bad",200,0);
+    return Lib.parseMarkets(j);
+  }
+  function need(v){ if(v===null||v===undefined) throw new ApiError("coingecko","bad",200,0); return v; }
+
+  return {
+    markets:function(ids){
+      if(!ids.length) return Promise.resolve([]);
+      return cg("/coins/markets",{vs_currency:"usd",ids:ids.join(","),order:"market_cap_desc",per_page:String(Math.min(ids.length,250)),
+        page:"1",sparkline:"false",price_change_percentage:"1h,24h,7d,30d"}).then(marketsFrom);
+    },
+    topMeme:function(){
+      return cg("/coins/markets",{vs_currency:"usd",category:"meme-token",order:"market_cap_desc",per_page:"30",
+        page:"1",sparkline:"false",price_change_percentage:"1h,24h,7d,30d"}).then(marketsFrom);
+    },
+    search:function(q){ return cg("/search",{query:q}).then(parseSearch); },
+    global:function(){ return cg("/global").then(parseGlobal).then(need); },
+    categories:function(){ return cg("/coins/categories").then(parseCategories).then(need); },
+    trending:function(){ return cg("/search/trending").then(parseTrending); },
+    fng:function(){
+      return getJson("feargreed",FNG+"?limit=1").then(parseFng).then(function(v){
+        if(!v) throw new ApiError("feargreed","bad",200,0);
+        return v;
+      });
+    },
+    dexProfiles:function(){
+      return getJson("dexscreener",DX+"/token-profiles/latest/v1").then(function(j){
+        if(!Array.isArray(j)) throw new ApiError("dexscreener","bad",200,0);
+        return j;
+      });
+    },
+    /* Pairs for up to 30 token addresses on one chain. Falls back to the older all-chains endpoint if the first fails. */
+    dexTokens:async function(chainId,addrs){
+      var c=Dex.safeSeg(chainId), list=addrs.map(function(a){ return Dex.safeSeg(a); }).filter(Boolean);
+      if(!c||!list.length) return [];
+      try{
+        var j=await getJson("dexscreener",DX+"/tokens/v1/"+c+"/"+list.join(","));
+        if(Array.isArray(j)) return j;
+        if(j&&Array.isArray(j.pairs)) return j.pairs;
+        throw new ApiError("dexscreener","bad",200,0);
+      }catch(e){
+        if(e&&e.kind==="rate") throw e;
+        var j2=await getJson("dexscreener",DX+"/latest/dex/tokens/"+list.join(","));
+        return (j2&&Array.isArray(j2.pairs))?j2.pairs:[];
+      }
+    },
+    dexByAddress:async function(addr){
+      var a=Dex.safeSeg(String(addr||"").trim());
+      if(!a) return [];
+      var j=await getJson("dexscreener",DX+"/latest/dex/tokens/"+a);
+      return (j&&Array.isArray(j.pairs))?j.pairs:[];
+    },
+    /* Every USDT and USDC symbol Binance lists for spot trading right now. */
+    binancePairs:async function(){
+      var lastErr=null;
+      for(var i=0;i<BN.length;i++){
+        try{
+          var list=Dex.parseTicker(await getJson("binance",BN[i]+"/api/v3/ticker/price"));
+          if(!list.length) throw new ApiError("binance","bad",200,0);
+          return list;
+        }catch(e){ lastErr=e; if(e&&e.kind==="rate") break; }
+      }
+      throw lastErr;
+    }
+  };
+}
+
+var Api={make:make,ApiError:ApiError,explain:explain,
+  parse:{global:parseGlobal,categories:parseCategories,fng:parseFng,search:parseSearch,trending:parseTrending}};
+if(isNode) module.exports=Api; else root.Api=Api;
+})(typeof window!=="undefined"?window:this);
+</script>
+<script>/* App core: storage, shared state, data-source status, polling and notifications.
+   Top-level code here only sets up variables. Nothing runs until start() at the end of app-ui.js. */
+"use strict";
+
+var $ = function (id) { return document.getElementById(id); };
+var esc = Lib.esc;
+
+var store = {
+  get: function (k, d) { try { var v = localStorage.getItem("mr." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set: function (k, v) { try { localStorage.setItem("mr." + k, JSON.stringify(v)); } catch (e) {} },
+  del: function (k) { try { localStorage.removeItem("mr." + k); } catch (e) {} },
+  obj: function (k) { var v = store.get(k, null); return (v && typeof v === "object" && !Array.isArray(v)) ? v : {}; },
+  arr: function (k) { var v = store.get(k, null); return Array.isArray(v) ? v : []; }
+};
+
+/* ---------- shared state ---------- */
+var S = {
+  coins: Lib.sanitizeCoins(store.get("coins", null)) || DEFAULT_COINS.slice(),
+  rules: Lib.sanitizeRules(store.get("rules", null), DEFAULT_RULES),
+  fired: store.obj("fired"),
+  log: store.arr("log").filter(function (a) { return a && typeof a.text === "string" && isFinite(a.t); }).slice(0, 60),
+  rows: [], topRows: [], launches: [], trend: [], found: [],
+  view: "watch", tab: "board",
+  pricesTs: 0, topAt: 0, trendAt: 0, memeAt: 0, launchAt: 0, bnAt: 0, bnCount: 0,
+  unread: 0, newSignals: 0, alertMsg: "", ckFrom: null, checked: null, addChoices: [], noteFail: ""
+};
+var api = Api.make({ getKey: function () { return store.get("cgkey", ""); } });
+
+/* ---------- time ---------- */
+function hhmm(ts) { return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+function fmtWhen(ts) {
+  var d = new Date(ts), today = new Date();
+  return d.toDateString() === today.toDateString() ? hhmm(ts)
+    : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) + " " + hhmm(ts);
+}
+
+/* ---------- data-source status, shown in the header, on the board and in Settings ---------- */
+var SRC = {
+  prices: { name: "CoinGecko: your watchlist prices" },
+  top: { name: "CoinGecko: top 30 meme coins" },
+  market: { name: "CoinGecko: market totals" },
+  meme: { name: "CoinGecko: meme sector total" },
+  trend: { name: "CoinGecko: trending" },
+  fng: { name: "Fear & Greed Index (alternative.me)" },
+  launch: { name: "DexScreener: new launches" },
+  binance: { name: "Binance: trading pairs" }
+};
+Object.keys(SRC).forEach(function (k) { SRC[k].ok = null; SRC[k].at = 0; SRC[k].err = null; SRC[k].note = ""; });
+function srcOk(k, note) { var s = SRC[k]; s.ok = true; s.at = Date.now(); s.err = null; s.note = note || ""; renderSources(); renderStatus(); renderBoardMsg(); }
+function srcFail(k, err) { var s = SRC[k]; s.ok = false; s.err = err; renderSources(); renderStatus(); renderBoardMsg(); }
+
+function shortLabel(err) {
+  switch (err && err.kind) {
+    case "rate": return "CoinGecko is rate limiting this browser";
+    case "auth": return "CoinGecko refused the request";
+    case "network": return "Could not reach CoinGecko";
+    case "timeout": return "CoinGecko is slow to answer";
+    default: return "CoinGecko is not answering";
+  }
+}
+function setDot(kind, text) { $("dot").className = "dot " + kind; $("stat").textContent = text; }
+function renderStatus() {
+  var p = SRC.prices;
+  if (!S.coins.length) { setDot("wait", "Your watchlist is empty"); return; }
+  if (p.ok === null) { setDot("wait", "Loading prices…"); return; }
+  if (p.ok) {
+    var stale = Date.now() - S.pricesTs > 20 * 60000;
+    setDot(stale ? "wait" : "live", "Prices as of " + hhmm(S.pricesTs) + (stale ? " (stale)" : ""));
+    return;
+  }
+  setDot(S.rows.length ? "wait" : "err", shortLabel(p.err) + (S.rows.length ? ". Showing prices from " + hhmm(S.pricesTs) : ""));
+}
+function renderBoardMsg() {
+  var s = S.view === "top" ? SRC.top : SRC.prices, have = (S.view === "top" ? S.topRows : S.rows).length;
+  var html = (s.ok === false) ? '<div class="notice' + (have ? "" : " err") + '"><p>' + esc(Api.explain(s.err)) + "</p></div>" : "";
+  $("board-msg").innerHTML = html + S.alertMsg;
+}
+function renderSources() {
+  $("src-rows").innerHTML = Object.keys(SRC).map(function (k) {
+    var s = SRC[k], pill, detail = "";
+    if (s.ok === null) { pill = '<span class="pill blue">Waiting</span>'; }
+    else if (s.ok) { pill = '<span class="pill green">Working</span>'; detail = s.note ? '<span class="nm">' + esc(s.note) + "</span>" : ""; }
+    else { pill = '<span class="pill red">Problem</span>'; detail = '<span class="nm">' + esc(Api.explain(s.err)) + "</span>"; }
+    return '<tr><td class="l">' + esc(s.name) + '</td><td class="l">' + pill + detail + '</td><td class="l">' + (s.at ? esc(fmtWhen(s.at)) : "—") + "</td></tr>";
+  }).join("");
+}
+
+/* ---------- polling: one job per data source, with backoff and a little jitter ---------- */
+var jobs = [];
+function makeJob(name, fn, baseMs) {
+  var job = { name: name, fn: fn, baseMs: baseMs, fails: 0, timer: null, running: false, again: false, last: 0 };
+  job.run = async function () {
+    if (job.running) return;
+    job.running = true;
+    var delay = job.baseMs;
+    try { await job.fn(); job.fails = 0; job.last = Date.now(); }
+    catch (e) {
+      job.fails++;
+      delay = Lib.backoffMs(job.fails, job.baseMs, 10 * 60000, e && e.retryAfterMs);
+      if (e && e.kind === "rate") delay = Math.max(delay, 180000);
+      if (!(e instanceof Api.ApiError) && window.console) console.error(name, e);
+    }
+    job.running = false;
+    if (job.again) { job.again = false; delay = 800; }
+    job.delay = delay;
+    clearTimeout(job.timer);
+    job.timer = setTimeout(job.run, delay * (0.9 + Math.random() * 0.2));
+  };
+  job.kick = function () {
+    if (job.running) { job.again = true; return; }
+    clearTimeout(job.timer);
+    job.run();
+  };
+  jobs.push(job);
+  return job;
+}
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState !== "visible") return;
+  jobs.forEach(function (j) { if (!j.running && j.fails === 0 && Date.now() - j.last > j.baseMs * 1.5) j.kick(); });
+});
+
+/* ---------- notifications ---------- */
+var swReg = null, swPromise = null, swTried = false;
+function wait(ms) { return new Promise(function (r) { setTimeout(function () { r(null); }, ms); }); }
+function initSW() {
+  if (!("serviceWorker" in navigator) || !/^https?:$/.test(location.protocol)) return Promise.resolve(null);
+  swTried = true;
+  swPromise =navigator.serviceWorker.register("sw.js").then(function (r) { swReg = r; return r; }, function () { swReg = null; return null; });
+  return swPromise;
+}
+function notifState() {
+  if (!("Notification" in window)) return "unsupported";
+  return Notification.permission;
+}
+/* Shows a system notification. Prefers the service worker (the only way that works on Android), falls back to a plain one. */
+async function showNote(title, body, tag) {
+  if (notifState() !== "granted") return false;
+  try {
+    if (swPromise) await Promise.race([swPromise, wait(2000)]);
+    if (swReg) {
+      var reg = await Promise.race([navigator.serviceWorker.ready, wait(2000)]);
+      if (reg && reg.showNotification) { await reg.showNotification(title, { body: body, tag: tag, icon: "icon-192.png" }); return true; }
+    }
+  } catch (e) {}
+  try { new Notification(title, { body: body, tag: tag, icon: "icon-192.png" }); return true; } catch (e) { return false; }
+}
+
+/* ---------- every alert goes through here: log, badges, banner, pop-up ---------- */
+function raise(items) {
+  if (!items.length) return;
+  var now = Date.now();
+  items.forEach(function (a) { S.log.unshift({ t: now, text: a.text }); });
+  S.log = S.log.slice(0, 60);
+  store.set("log", S.log);
+  if (S.tab !== "alerts") {
+    S.unread += items.length;
+    S.alertMsg = '<div class="notice"><p><b>New alert.</b> ' + esc(items[0].text) + (items.length > 1 ? " and " + (items.length - 1) + " more" : "") +
+      '. <button class="chip" type="button" data-go="alerts">View alerts</button></p></div>';
+    renderBoardMsg();
+  }
+  updateBadges(); renderLog();
+  items.slice(0, 3).forEach(function (a) { showNote("Meme Radar", a.text, a.tag || ("mr-" + a.text.slice(0, 60))); });
+  if (items.length > 3) showNote("Meme Radar", "and " + (items.length - 3) + " more alerts", "mr-more");
+}
+</script>
+<script>/* The Board tab: watchlist, top meme coins, add and remove, market strip, trending. */
+"use strict";
+
+function pctCell(v) { var p = Lib.fmtPct(v); return '<td class="num ' + p.cls + '">' + p.text + "</td>"; }
+function turnText(t) { return isFinite(t) ? (t * 100).toFixed(t < 0.1 ? 1 : 0) + "%" : "—"; }
+function currentRows() { return S.view === "top" ? S.topRows : S.rows; }
+function refreshWord() { return store.get("cgkey", "") ? "minute" : "two minutes"; }
+
+function coinRow(c, r, mode) {
+  var link = "https://www.coingecko.com/en/coins/" + Lib.cgSeg(c.id);
+  var head = '<td><div class="c1"><a class="sym" href="' + link + '" target="_blank" rel="noopener">' + esc(c.sym) + '</a><span class="nm">' + esc(c.name) + "</span></div></td>";
+  var act = mode === "rm" ? '<td><button class="rm" type="button" data-rm="' + esc(c.id) + '" aria-label="Remove ' + esc(c.sym) + '">×</button></td>'
+    : mode === "add" ? '<td><button class="btn ghost sm" type="button" data-watch="' + esc(c.id) + '">+ Watch</button></td>'
+    : '<td><span class="sub">On your list</span></td>';
+  if (!r) return "<tr>" + head + new Array(9).join('<td class="num flat">—</td>') + '<td class="l fl"></td>' + act + "</tr>";
+  var flags = Lib.flagsFor(r).map(function (f) { return '<span class="pill">' + f + "</span>"; }).join("");
+  return "<tr>" + head + '<td class="num">' + Lib.fmtPrice(r.price) + "</td>" + pctCell(r.percent_change_1h) + pctCell(r.percent_change_24h) +
+    pctCell(r.percent_change_7d) + pctCell(r.percent_change_30d) + '<td class="num">' + Lib.fmtUsd(r.market_cap) + '</td><td class="num">' +
+    Lib.fmtUsd(r.volume_24h) + '</td><td class="num">' + turnText(Lib.turnoverOf(r)) + '</td><td class="l fl">' + flags + "</td>" + act + "</tr>";
+}
+
+function renderBoard() {
+  var tb = $("rows"), mine = {};
+  S.coins.forEach(function (c) { mine[c.id] = 1; });
+  if (S.view === "watch") {
+    var by = {}; S.rows.forEach(function (r) { by[r.id] = r; });
+    tb.innerHTML = S.coins.length
+      ? S.coins.map(function (c) { return coinRow(c, by[c.id], "rm"); }).join("")
+      : '<tr><td colspan="11" class="l"><span class="sub">Your watchlist is empty. Add a coin below, or switch to the top 30 list and press + Watch.</span></td></tr>';
+    $("board-sub").textContent = "Prices and moves from CoinGecko, refreshed every " + refreshWord() + " while this page is open. Flags are rules of thumb, not advice.";
+  } else {
+    tb.innerHTML = S.topRows.length
+      ? S.topRows.map(function (r) { return coinRow({ id: r.id, sym: r.symbol, name: r.name }, r, mine[r.id] ? "on" : "add"); }).join("")
+      : '<tr><td colspan="11" class="l"><span class="sub">' + (SRC.top.ok === false ? "The list could not be loaded." : "Loading the list…") + "</span></td></tr>";
+    $("board-sub").textContent = "The 30 largest coins in CoinGecko's meme category by market cap. Press + Watch to add one to your watchlist and alerts.";
+  }
+  [].forEach.call(document.querySelectorAll("[data-view]"), function (b) { b.setAttribute("aria-pressed", String(b.dataset.view === S.view)); });
+  renderDots(); fillTargetCoins();
+}
+
+function renderDots() {
+  var items = currentRows().map(function (r) { return { sym: r.symbol, t: Lib.turnoverOf(r), v: r.volume_24h, m: r.market_cap }; })
+    .filter(function (x) { return isFinite(x.t); }).sort(function (a, b) { return b.t - a.t; });
+  if (!items.length) { $("dots").innerHTML = '<p class="sub">Appears when prices load.</p>'; return; }
+  $("dots").innerHTML = items.map(function (x) {
+    return '<div class="r" title="' + esc(x.sym) + ": " + Lib.fmtUsd(x.v) + " traded against " + Lib.fmtUsd(x.m) + ' market cap"><span class="sym" style="font-size:13px">' + esc(x.sym) + "</span>" +
+      '<div class="track"><i class="tick key" style="left:33.333%"></i><i class="tick" style="left:66.667%"></i><i class="mk" style="left:' + (Lib.logPos(x.t) * 100) + '%"></i></div><span class="num">' + turnText(x.t) + "</span></div>";
+  }).join("") + '<div class="axis"><div></div><div><span style="left:0">0.1%</span><span style="left:33.333%">1%</span><span style="left:66.667%">10%</span><span style="left:100%">100%</span></div><div></div></div>';
+}
+
+function setView(v) {
+  S.view = v === "top" ? "top" : "watch";
+  renderBoard(); renderBoardMsg();
+  if (S.view === "top") jobTop.kick();
+}
+
+/* ---------- add and remove ---------- */
+function addMsg(html) { $("add-msg").innerHTML = html; }
+function pushCoin(c) {
+  if (S.coins.some(function (x) { return x.id === c.id; })) { addMsg("Already on your watchlist."); return; }
+  if (S.coins.length >= MAX_COINS) { addMsg("The watchlist is full (" + MAX_COINS + " coins). Remove one first."); return; }
+  S.coins.push({ id: c.id, sym: c.sym, name: c.name });
+  store.set("coins", S.coins);
+  addMsg("Added " + esc(c.sym) + ".");
+  $("add-q").value = ""; S.addChoices = [];
+  renderBoard(); renderSignals(); jobPrices.kick();
+}
+function watchById(id) {
+  var hit = null;
+  S.topRows.forEach(function (r) { if (r.id === id) hit = { id: r.id, sym: r.symbol, name: r.name }; });
+  S.trend.forEach(function (r) { if (!hit && r.id === id) hit = { id: r.id, sym: r.sym, name: r.name }; });
+  if (hit) { pushCoin(hit); renderTrend(); }
+}
+function removeCoin(id) {
+  S.coins = S.coins.filter(function (c) { return c.id !== id; });
+  S.rows = S.rows.filter(function (r) { return r.id !== id; });
+  S.rules.targets = S.rules.targets.filter(function (t) { return t.id !== id; });
+  store.set("coins", S.coins); store.set("rules", S.rules);
+  renderBoard(); renderSignals(); renderRules();
+}
+async function addCoin(q) {
+  q = q.trim();
+  if (!q) return;
+  addMsg("Searching…");
+  try {
+    var found = await api.search(q);
+    if (!found.length) { addMsg("No match. Try the full name or the symbol."); return; }
+    if (found.length === 1) { pushCoin(found[0]); return; }
+    S.addChoices = found;
+    addMsg("Which one? " + found.map(function (c, i) {
+      return '<button class="chip" type="button" data-pick="' + i + '">' + esc(c.sym) + " · " + esc(c.name) + (isFinite(c.rank) ? " · #" + c.rank : "") + "</button>";
+    }).join(" ") + " Many fakes copy real names, so check the rank.");
+  } catch (e) { addMsg(esc(Api.explain(e))); }
+}
+
+/* ---------- loading data ---------- */
+function latestTs(rows) {
+  var ts = rows.map(function (r) { return Date.parse(r.last_updated_time); }).filter(isFinite);
+  return ts.length ? Math.max.apply(null, ts) : Date.now();
+}
+async function loadPrices() {
+  if (!S.coins.length) { S.rows = []; renderBoard(); renderStatus(); return; }
+  try {
+    var rows = await api.markets(S.coins.map(function (c) { return c.id; }));
+    if (!rows.length) throw new Api.ApiError("coingecko", "bad", 200, 0);
+    S.rows = rows; S.pricesTs = latestTs(rows);
+    srcOk("prices"); renderBoard(); runPriceAlerts(rows);
+  } catch (e) { srcFail("prices", e); throw e; }
+}
+async function loadTop() {
+  if (S.view !== "top" || S.tab !== "board") return;
+  try {
+    S.topRows = await api.topMeme(); S.topAt = Date.now();
+    srcOk("top"); renderBoard();
+  } catch (e) { srcFail("top", e); renderBoard(); throw e; }
+}
+function runPriceAlerts(rows) {
+  var res = Lib.evaluateAlerts(rows, S.rules, S.fired);
+  S.fired = res.fired; store.set("fired", S.fired);
+  raise(res.alerts);
+}
+
+async function loadMarket() {
+  try {
+    var g = await api.global();
+    var p = Lib.fmtPct(g.chg);
+    $("g-cap").textContent = Lib.fmtUsd(g.cap);
+    $("g-capchg").innerHTML = '<span class="' + p.cls + '">' + p.text + "</span> in 24h";
+    $("g-btc").textContent = isFinite(g.btc) ? g.btc.toFixed(1) + "%" : "—";
+    srcOk("market");
+  } catch (e) { srcFail("market", e); throw e; }
+  if (Date.now() - S.memeAt > 14 * 60000) {
+    try {
+      var m = await api.categories();
+      var q = Lib.fmtPct(m.chg);
+      $("g-meme").textContent = Lib.fmtUsd(m.cap);
+      $("g-memechg").innerHTML = '<span class="' + q.cls + '">' + q.text + "</span> in 24h";
+      S.memeAt = Date.now(); srcOk("meme");
+    } catch (e) { srcFail("meme", e); if (e && e.kind === "rate") throw e; }
+  }
+}
+async function loadFng() {
+  try {
+    var f = await api.fng();
+    $("g-fg").textContent = String(f.value);
+    $("g-fgl").textContent = f.label || "0 fear, 100 greed";
+    srcOk("fng");
+  } catch (e) { srcFail("fng", e); throw e; }
+}
+async function loadTrend() {
+  if (S.tab !== "signals") return;
+  try { S.trend = await api.trending(); S.trendAt = Date.now(); srcOk("trend"); renderTrend(); }
+  catch (e) { srcFail("trend", e); renderTrend(); throw e; }
+}
+function renderTrend() {
+  var mine = {}; S.coins.forEach(function (c) { mine[c.id] = 1; });
+  if (!S.trend.length) {
+    $("trend").innerHTML = '<li class="t"><span class="sub">' + (SRC.trend.ok === false ? esc(Api.explain(SRC.trend.err)) : "Loading…") + "</span><span></span></li>";
+    return;
+  }
+  $("trend").innerHTML = S.trend.map(function (c) {
+    var p = Lib.fmtPct(c.chg24);
+    return '<li class="t"><span><a class="sym" href="https://www.coingecko.com/en/coins/' + Lib.cgSeg(c.id) + '" target="_blank" rel="noopener">' + esc(c.sym) +
+      '</a> <span class="sub">' + esc(c.name) + (isFinite(c.rank) ? " · #" + c.rank : "") + '</span></span><span><span class="num ' + p.cls + '">' + p.text + "</span> " +
+      (mine[c.id] ? '<span class="sub">On your list</span>' : '<button class="btn ghost sm" type="button" data-watch="' + esc(c.id) + '">+ Watch</button>') + "</span></li>";
+  }).join("");
+}
+</script>
+<script>/* New launches (DexScreener), the paste-an-address check, the checklist prefill, and the Binance pair watcher. */
+"use strict";
+
+function flagPill(f) { return '<span class="pill' + (f.lv === "red" ? " red" : "") + '">' + esc(f.t) + "</span>"; }
+
+function launchRow(r) {
+  var pc = Lib.fmtPct(r.chg24);
+  var bs = (isFinite(r.buys) && isFinite(r.sells)) ? r.buys + " / " + r.sells : "—";
+  return '<tr><td><div class="c1"><span class="sym">' + esc(r.symbol) + '</span><span class="nm">' + esc(r.name) + '</span><span class="addr">' + esc(Dex.shortAddr(r.addr)) + "</span></div></td>" +
+    '<td class="l">' + esc(Dex.chainName(r.chain)) + '</td><td class="num">' + Dex.fmtAge(r.ageH) + '</td><td class="num">' + Lib.fmtUsd(r.liq) +
+    '</td><td class="num">' + Lib.fmtUsd(r.vol24) + '</td><td class="num">' + Lib.fmtUsd(Dex.valueOf(r)) + '</td><td class="num ' + pc.cls + '">' + pc.text +
+    '</td><td class="num">' + bs + '</td><td class="l fl">' + Dex.flags(r).map(flagPill).join("") + "</td>" +
+    '<td class="lnk"><a href="' + Dex.dexUrl(r.chain, r.pair) + '" target="_blank" rel="noopener">DexScreener ↗</a> ' +
+    '<button class="btn ghost sm" type="button" data-ck="' + esc(r.chain + "|" + r.addr) + '">Checklist</button></td></tr>';
+}
+function visibleLaunches() {
+  var hide = $("l-hide").checked, chain = $("l-chain").value;
+  return S.launches.filter(function (r) { return (chain === "all" || r.chain === chain) && !(hide && Dex.hasRed(Dex.flags(r))); });
+}
+function renderLaunch() {
+  var sel = $("l-chain"), cur = sel.value || "all", chains = [];
+  S.launches.forEach(function (r) { if (chains.indexOf(r.chain) < 0) chains.push(r.chain); });
+  sel.innerHTML = '<option value="all">All chains</option>' + chains.map(function (c) { return '<option value="' + esc(c) + '">' + esc(Dex.chainName(c)) + "</option>"; }).join("");
+  sel.value = chains.indexOf(cur) >= 0 ? cur : "all";
+  var list = visibleLaunches(), s = SRC.launch, empty;
+  if (s.ok === null) empty = "Loading new launches…";
+  else if (!S.launches.length) empty = s.ok ? "DexScreener has no new profiles right now." : "The list could not be loaded.";
+  else empty = "Everything here has a red flag or is on another chain. Untick the box above to see it.";
+  $("l-msg").innerHTML = (s.ok === false) ? '<div class="notice' + (S.launches.length ? "" : " err") + '"><p>' + esc(Api.explain(s.err)) + "</p></div>" : "";
+  $("l-rows").innerHTML = list.length ? list.map(launchRow).join("") : '<tr><td colspan="10" class="l"><span class="sub">' + empty + "</span></td></tr>";
+  $("l-count").textContent = S.launches.length ? "Showing " + list.length + " of " + S.launches.length + (S.launchAt ? " · updated " + hhmm(S.launchAt) : "") : "";
+}
+
+/* ---------- checking one address ---------- */
+async function checkAddress(q) {
+  q = q.trim();
+  var msg = $("c-msg"), out = $("c-out");
+  out.innerHTML = ""; S.checked = null;
+  if (!Dex.validAddress(q)) { msg.textContent = "That does not look like a token address. Paste just the address, not a link."; return; }
+  msg.textContent = "Looking it up…";
+  try {
+    var pairs = await api.dexByAddress(q);
+    var rows = Dex.launchRows(pairs, [q], Date.now()).sort(function (a, b) { return (isFinite(b.liq) ? b.liq : -1) - (isFinite(a.liq) ? a.liq : -1); });
+    if (!rows.length) {
+      msg.textContent = pairs.length ? "DexScreener has pools that use this address, but not as the token being traded. Paste the token's own address."
+        : "DexScreener has no pools for this address. It may be too new, on a chain it does not cover, or not a token.";
+      return;
+    }
+    var r = rows[0]; S.checked = r;
+    msg.textContent = rows.length > 1 ? "This address exists on " + rows.length + " chains. Showing the one with the deepest pool." : "";
+    var fl = Dex.flags(r), pc = Lib.fmtPct(r.chg24);
+    out.innerHTML = '<div class="res"><h3>' + esc(r.symbol) + ' <span class="sub">' + esc(r.name) + "</span></h3><dl class=\"kv\">" +
+      "<dt>Chain</dt><dd>" + esc(Dex.chainName(r.chain)) + "</dd><dt>Pool age</dt><dd>" + Dex.fmtAge(r.ageH) + "</dd><dt>Pool</dt><dd>" + Lib.fmtUsd(r.liq) + "</dd>" +
+      "<dt>24h volume</dt><dd>" + Lib.fmtUsd(r.vol24) + "</dd><dt>Value (FDV)</dt><dd>" + Lib.fmtUsd(Dex.valueOf(r)) + "</dd>" +
+      '<dt>24h</dt><dd class="' + pc.cls + '">' + pc.text + "</dd><dt>Buys / sells</dt><dd>" + ((isFinite(r.buys) && isFinite(r.sells)) ? r.buys + " / " + r.sells : "—") + "</dd></dl>" +
+      "<p>" + (fl.length ? fl.map(flagPill).join("") : '<span class="pill green">No flags</span>') + "</p>" +
+      '<p class="row-add"><button class="btn ghost sm" type="button" data-ck="check">Run the checklist</button> <a href="' + Dex.dexUrl(r.chain, r.pair) + '" target="_blank" rel="noopener">DexScreener ↗</a></p>' +
+      '<p class="sub">No flags means nothing obvious showed in the pool data. It says nothing about who holds the supply or whether the creator can print more.</p></div>';
+  } catch (e) { msg.textContent = Api.explain(e); }
+}
+
+/* Fill the checklist from a launch row. Answers typed for a previous token are cleared so they cannot carry over. */
+function prefillChecklist(r) {
+  var put = function (id, v, dp) { $(id).value = isFinite(v) ? String(dp ? Math.round(v * 10) / 10 : Math.round(v)) : ""; };
+  put("k-age", r.ageH, true); put("k-liq", r.liq); put("k-vol", r.vol24); put("k-fdv", Dex.valueOf(r));
+  ["k-top", "k-mint", "k-lp", "k-sell"].forEach(function (id) { $(id).value = ""; });
+  S.ckFrom = { symbol: r.symbol, chain: r.chain, at: Date.now() };
+  renderCkFrom(); renderChecklist(); openTab("check");
+}
+function renderCkFrom() {
+  $("ck-from").textContent = S.ckFrom ? "Filled in from DexScreener for " + S.ckFrom.symbol + " on " + Dex.chainName(S.ckFrom.chain) + " at " + hhmm(S.ckFrom.at) +
+    ". Holder share, mint authority, pool lock and a test sell still need you." : "";
+}
+function launchByKey(key) {
+  var hit = null;
+  S.launches.forEach(function (r) { if (r.chain + "|" + r.addr === key) hit = r; });
+  return hit;
+}
+
+/* ---------- jobs ---------- */
+async function loadLaunches() {
+  try {
+    var profiles = await api.dexProfiles();
+    var groups = Dex.groupProfiles(profiles, 30, 6), now = Date.now(), rows = [], failed = null, bad = 0;
+    for (var i = 0; i < groups.length; i++) {
+      try { rows = rows.concat(Dex.launchRows(await api.dexTokens(groups[i].chain, groups[i].addrs), groups[i].addrs, now)); }
+      catch (e) { failed = e; bad++; if (e && e.kind === "rate") break; }
+    }
+    if (!rows.length && failed) throw failed;
+    S.launches = Dex.sortNewest(rows); S.launchAt = Date.now();
+    srcOk("launch", bad ? bad + " of " + groups.length + " chains did not load this time." : "");
+    renderLaunch(); runLaunchAlerts(S.launches);
+  } catch (e) { srcFail("launch", e); renderLaunch(); throw e; }
+}
+function runLaunchAlerts(rows) {
+  var res = Dex.newLaunchAlerts(rows, store.obj("seenLaunch"), S.rules.minLiq);
+  store.set("seenLaunch", res.seen);
+  if (!S.rules.launch || !res.alerts.length) return;
+  raise(res.alerts.map(function (r) {
+    return { text: "New on DexScreener: " + r.symbol + " (" + Dex.chainName(r.chain) + "), pool " + Lib.fmtUsd(r.liq) + ", " + Dex.fmtAge(r.ageH) +
+      " old. It passes your screen. That is not a recommendation.", tag: "mr-l-" + r.chain + r.addr.slice(0, 12) };
+  }));
+}
+
+async function loadBinance() {
+  if (!S.rules.bn) return;
+  try {
+    var list = await api.binancePairs();
+    var res = Dex.diffPairs(store.obj("bnSeen"), list);
+    store.set("bnSeen", res.seen);
+    if (res.seeded) store.set("bnSince", Date.now());
+    S.bnAt = Date.now(); S.bnCount = list.length;
+    srcOk("binance");
+    if (res.fresh.length) {
+      var groups = Dex.groupFresh(res.fresh), now = Date.now();
+      store.set("bnFound", groups.map(function (g) { return { t: now, base: g.base, quotes: g.quotes }; }).concat(store.arr("bnFound")).slice(0, 20));
+      raise(groups.map(function (g) {
+        return { text: "Binance opened trading for " + g.base + " (" + g.quotes.join(", ") + "). Check Binance's announcement and the coin before acting.", tag: "mr-bn-" + g.base };
+      }));
+    }
+    renderBinance();
+  } catch (e) { srcFail("binance", e); renderBinance(); throw e; }
+}
+function renderBinance() {
+  var s = SRC.binance, since = store.get("bnSince", 0), msg;
+  if (!S.rules.bn) msg = "Turned off. Switch it on under Alerts.";
+  else if (s.ok === null) msg = "Checking…";
+  else if (s.ok === false && !S.bnAt) msg = "Could not read Binance's pair list from this page. " + esc(Api.explain(s.err)) + " Use the announcements link below instead.";
+  else msg = "Watching " + S.bnCount + " USDT and USDC pairs on Binance (checked " + hhmm(S.bnAt) + ")" + (since ? ", since " + esc(fmtWhen(since)) : "") +
+    ". A pair that opens for the first time shows here and as an alert." + (s.ok === false ? " The latest check failed. " + esc(Api.explain(s.err)) : "");
+  $("bn-msg").innerHTML = msg;
+  $("bn-list").innerHTML = store.arr("bnFound").filter(function (f) { return f && isFinite(f.t) && typeof f.base === "string" && Array.isArray(f.quotes); }).map(function (f) {
+    return "<li><time>" + esc(fmtWhen(f.t)) + "</time><span><b>" + esc(f.base) + "</b> " + esc(f.quotes.join(", ")) + "</span></li>";
+  }).join("");
+}
+</script>
+<script>/* Signals, alerts, checklist, settings, tabs, event wiring, and start-up. */
+"use strict";
+
+var jobPrices, jobTop, jobMarket, jobFng, jobTrend, jobLaunch, jobBinance;
+
+/* ---------- signals ---------- */
+var tagFilter = "All", prevVisit = Number(store.get("visit", NaN));
+store.set("visit", Date.now());
+var cutoff = isFinite(prevVisit) ? prevVisit : Date.parse(BUILT) - 3 * 864e5;
+function dayLabel(d) { return new Date(d + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" }); }
+function isNew(s) { return Date.parse(s.d + "T23:59:59Z") > cutoff; }
+function renderSignals() {
+  var mine = {}; S.coins.forEach(function (c) { mine[c.sym] = true; });
+  $("chips").innerHTML = ["All"].concat(TAGS).map(function (t) {
+    return '<button class="chip" type="button" data-tag="' + t + '" aria-pressed="' + (t === tagFilter) + '">' + t + "</button>";
+  }).join("");
+  var list = SIGNALS.filter(function (s) { return tagFilter === "All" || s.tag === tagFilter; });
+  $("feed").innerHTML = list.length ? list.map(function (s) {
+    var pills = s.c.map(function (x) { return '<span class="pill' + (mine[x] ? " green" : "") + '" title="' + (mine[x] ? "On your watchlist" : "") + '">' + esc(x) + "</span>"; }).join("");
+    var link = /^https:\/\//.test(s.u) ? '<a href="' + esc(s.u) + '" target="_blank" rel="noopener">Open article ↗</a>' : "";
+    return '<li class="item"><time datetime="' + esc(s.d) + '">' + dayLabel(s.d) + "</time><div><h3>" + esc(s.h) + "</h3><p>" + esc(s.s) + '</p><div class="meta">' +
+      '<span class="pill' + (s.tag === "Risk" ? " red" : " blue") + '">' + esc(s.tag) + "</span>" + pills +
+      "<span>" + esc(s.src) + " · " + (s.v === "read" ? "Read" : "Headline only") + "</span>" + link + (isNew(s) ? '<span class="new">New</span>' : "") + "</div></div></li>";
+  }).join("") : '<li class="sub">Nothing under this filter.</li>';
+}
+
+/* ---------- alerts ---------- */
+function updateBadges() {
+  var ba = $("b-alert"); ba.hidden = !S.unread; ba.textContent = S.unread;
+  var bs = $("b-sig"); bs.hidden = !S.newSignals; bs.textContent = S.newSignals;
+  try { document.title = (S.unread ? "(" + S.unread + ") " : "") + "Meme Radar"; } catch (e) {}
+}
+function renderLog() {
+  $("log").innerHTML = S.log.length ? S.log.map(function (a) {
+    return "<li><time>" + esc(fmtWhen(a.t)) + "</time><span>" + esc(a.text) + "</span></li>";
+  }).join("") : '<li><span></span><span class="sub">No alerts yet. One appears here when a rule trips while this page is open.</span></li>';
+}
+function renderRules() {
+  var R = S.rules, v = function (x) { return x === null ? "" : x; };
+  $("r-up").value = v(R.up); $("r-down").value = v(R.down); $("r-hour").value = v(R.hour);
+  $("r-launch").checked = R.launch; $("r-minliq").value = R.minLiq; $("r-bn").checked = R.bn;
+  $("targets").innerHTML = R.targets.length ? R.targets.map(function (t, i) {
+    return '<li><span class="sym" style="font-size:13px">' + esc(t.sym) + "</span><span>" + (t.dir === "above" ? "rises above" : "falls below") + " $" + esc(Lib.plainPrice(t.price)) +
+      ' <button class="rm" type="button" data-rt="' + i + '" aria-label="Remove target">×</button></span></li>';
+  }).join("") : '<li><span></span><span class="sub">No price targets.</span></li>';
+}
+function fillTargetCoins() {
+  var sel = $("t-coin"), cur = sel.value;
+  sel.innerHTML = S.coins.map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.sym) + "</option>"; }).join("");
+  if (cur) sel.value = cur;
+}
+function saveRules() { store.set("rules", S.rules); }
+
+/* ---------- notifications panel ---------- */
+function renderNotify() {
+  var st = notifState(), msg, btn = false, test = false;
+  if (location.protocol === "file:") msg = "Notifications do not work when the page is opened from a file. Host the site (see the setup steps) or open it from localhost.";
+  else if (st === "unsupported") msg = "This browser does not offer notifications here. Alerts still show on this page and in the tab title.";
+  else if (st === "granted") { msg = "Notifications are on."; test = true; }
+  else if (st === "denied") msg = "Notifications are blocked for this site. Allow them in your browser's site settings, then reload.";
+  else { msg = "Notifications are off. Turn them on to get a pop-up when a rule trips, even while this page is in another tab."; btn = true; }
+  if (test && S.noteFail) msg += " " + S.noteFail;
+  $("n-state").textContent = msg; $("n-btn").hidden = !btn; $("n-test").hidden = !test;
+  $("n-help").textContent = "Pop-ups only appear while this page is open in a browser tab or window, including in the background. On an iPhone, add the site to your Home Screen first and open it from there.";
+}
+/* Why a pop-up could not be shown, in words the person can act on. */
+function noteProblem() {
+  if (swReg) return "The test pop-up could not be shown. Check this site's notification settings in your browser.";
+  if (swTried) return "The test pop-up could not be shown. Phones need the small file sw.js uploaded next to index.html. Alerts still show on this page, in the tab title and in the log.";
+  return "The test pop-up could not be shown in this browser. Alerts still show on this page, in the tab title and in the log.";
+}
+async function testNote(body) {
+  var ok = await showNote("Meme Radar", body, "mr-test");
+  S.noteFail = ok ? "" : noteProblem();
+  renderNotify();
+}
+async function askNotify() {
+  try { await Notification.requestPermission(); } catch (e) {}
+  renderNotify();
+  if (notifState() === "granted") await testNote("Notifications are on. Alerts will look like this.");
+}
+
+/* ---------- checklist ---------- */
+function renderChecklist() {
+  var v = function (id) { return $(id).value; };
+  var res = Lib.evaluateChecklist({ age: v("k-age"), liq: v("k-liq"), vol: v("k-vol"), fdv: v("k-fdv"), top: v("k-top"), mint: v("k-mint"), lp: v("k-lp"), sell: v("k-sell") });
+  var label = { pass: ["Pass", "green"], warn: ["Check", ""], fail: ["Fail", "red"], unknown: ["Unknown", "blue"] };
+  $("ck-out").innerHTML = '<div class="verdict ' + res.verdict.cls + '"><h3>' + esc(res.verdict.title) + "</h3><p>" + esc(res.verdict.text) + "</p></div>" +
+    '<ul class="checks">' + res.checks.map(function (c) {
+      var l = label[c.s];
+      return '<li><span><span class="pill ' + l[1] + '">' + l[0] + "</span></span><span><b>" + esc(c.name) + "</b><br>" + esc(c.text) + "</span></li>";
+    }).join("") + '</ul><p class="sub">A pass means nothing obvious is wrong. It does not mean the price will rise. The thresholds are rules of thumb.</p>';
+}
+
+/* ---------- settings ---------- */
+function applyTheme(t) {
+  var el = document.documentElement;
+  if (t === "light" || t === "dark") el.setAttribute("data-theme", t); else el.removeAttribute("data-theme");
+}
+function renderTheme() {
+  var t = store.get("theme", "auto");
+  [].forEach.call(document.querySelectorAll("[data-theme-set]"), function (b) { b.setAttribute("aria-pressed", String(b.dataset.themeSet === t)); });
+}
+function setTheme(t) {
+  if (["auto", "light", "dark"].indexOf(t) < 0) return;
+  store.set("theme", t); applyTheme(t); renderTheme();
+}
+function renderKey() {
+  $("key-msg").textContent = store.get("cgkey", "") ? "A key is saved in this browser. Prices refresh every minute." : "No key saved. Prices refresh every two minutes.";
+}
+function setRefresh() {
+  var base = store.get("cgkey", "") ? 60000 : 120000;
+  jobPrices.baseMs = base; jobTop.baseMs = base;
+  renderKey(); renderBoard(); jobPrices.kick(); jobTop.kick();
+}
+var resetArmed = false;
+function resetAll() {
+  var btn = $("reset-btn");
+  if (!resetArmed) {
+    resetArmed = true; btn.textContent = "Click again to confirm";
+    setTimeout(function () { resetArmed = false; btn.textContent = "Reset everything"; }, 5000);
+    return;
+  }
+  try { Object.keys(localStorage).filter(function (k) { return k.indexOf("mr.") === 0; }).forEach(function (k) { localStorage.removeItem(k); }); } catch (e) {}
+  location.reload();
+}
+
+/* ---------- tabs ---------- */
+var TABS = ["board", "launch", "signals", "alerts", "check", "settings"];
+function openTab(name) {
+  if (TABS.indexOf(name) < 0) name = "board";
+  S.tab = name;
+  TABS.forEach(function (t) {
+    $("t-" + t).setAttribute("aria-selected", String(t === name));
+    $("p-" + t).hidden = t !== name;
+  });
+  if (name === "alerts") { S.unread = 0; S.alertMsg = ""; renderBoardMsg(); }
+  if (name === "signals") { S.newSignals = 0; if (jobTrend && Date.now() - S.trendAt > 300000) jobTrend.kick(); }
+  if (name === "board" && S.view === "top" && jobTop && Date.now() - S.topAt > 120000) jobTop.kick();
+  updateBadges();
+  store.set("tab", name);
+}
+
+/* ---------- wiring ---------- */
+document.addEventListener("click", function (e) {
+  var el = e.target.closest ? e.target.closest("[data-tab],[data-go],[data-tag],[data-rm],[data-rt],[data-pick],[data-watch],[data-view],[data-theme-set],[data-ck],#log-clear,#n-btn,#n-test,#reset-btn,#key-clear") : null;
+  if (!el) return;
+  var d = el.dataset;
+  if (d.tab !== undefined) openTab(d.tab);
+  else if (d.go !== undefined) openTab(d.go);
+  else if (d.tag !== undefined) { tagFilter = d.tag; renderSignals(); }
+  else if (d.rm !== undefined) removeCoin(d.rm);
+  else if (d.rt !== undefined) { S.rules.targets.splice(Number(d.rt), 1); saveRules(); renderRules(); }
+  else if (d.pick !== undefined) { var c = S.addChoices[Number(d.pick)]; if (c) pushCoin(c); }
+  else if (d.watch !== undefined) watchById(d.watch);
+  else if (d.view !== undefined) setView(d.view);
+  else if (d.themeSet !== undefined) setTheme(d.themeSet);
+  else if (d.ck !== undefined) { var r = d.ck === "check" ? S.checked : launchByKey(d.ck); if (r) prefillChecklist(r); }
+  else if (el.id === "log-clear") { S.log = []; store.set("log", S.log); renderLog(); }
+  else if (el.id === "n-btn") askNotify();
+  else if (el.id === "n-test") testNote("This is a test alert.");
+  else if (el.id === "reset-btn") resetAll();
+  else if (el.id === "key-clear") { store.del("cgkey"); $("key-in").value = ""; setRefresh(); }
+});
+$("add-form").addEventListener("submit", function (e) { e.preventDefault(); addCoin($("add-q").value); });
+$("c-form").addEventListener("submit", function (e) { e.preventDefault(); checkAddress($("c-addr").value); });
+$("l-hide").addEventListener("change", renderLaunch);
+$("l-chain").addEventListener("change", renderLaunch);
+$("key-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var k = $("key-in").value.trim();
+  if (!/^[A-Za-z0-9_-]{8,100}$/.test(k)) { $("key-msg").textContent = "That does not look like a CoinGecko key. It is letters, numbers and dashes, usually starting CG-."; return; }
+  store.set("cgkey", k); $("key-in").value = ""; setRefresh();
+});
+$("t-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var id = $("t-coin").value, price = Number($("t-price").value);
+  var c = S.coins.filter(function (x) { return x.id === id; })[0];
+  if (!c || !(price > 0)) return;
+  S.rules.targets.push({ id: id, sym: c.sym, dir: $("t-dir").value === "below" ? "below" : "above", price: price });
+  saveRules(); renderRules(); $("t-price").value = "";
+  if (S.rows.length) runPriceAlerts(S.rows);
+});
+[["r-up", "up"], ["r-down", "down"], ["r-hour", "hour"]].forEach(function (p) {
+  $(p[0]).addEventListener("change", function () {
+    var raw = $(p[0]).value.trim(), v = Number(raw);
+    if (raw === "") S.rules[p[1]] = null;
+    else if (isFinite(v) && v > 0) S.rules[p[1]] = v;
+    else { renderRules(); return; }
+    saveRules(); renderRules(); if (S.rows.length) runPriceAlerts(S.rows);
+  });
+});
+$("r-minliq").addEventListener("change", function () {
+  var v = Number($("r-minliq").value);
+  if (isFinite(v) && v > 0) { S.rules.minLiq = v; saveRules(); }
+  renderRules();
+});
+$("r-launch").addEventListener("change", function () { S.rules.launch = $("r-launch").checked; saveRules(); });
+$("r-bn").addEventListener("change", function () {
+  S.rules.bn = $("r-bn").checked; saveRules(); renderBinance();
+  if (S.rules.bn && jobBinance) jobBinance.kick();
+});
+$("ck-form").addEventListener("input", renderChecklist);
+$("ck-form").addEventListener("change", renderChecklist);
+document.querySelector(".tabs").addEventListener("keydown", function (e) {
+  var i = TABS.indexOf(S.tab);
+  if (e.key === "ArrowRight") i = (i + 1) % TABS.length; else if (e.key === "ArrowLeft") i = (i + TABS.length - 1) % TABS.length; else return;
+  openTab(TABS[i]); $("t-" + TABS[i]).focus();
+});
+window.addEventListener("hashchange", function () { var h = (location.hash || "").replace("#", ""); if (TABS.indexOf(h) >= 0) openTab(h); });
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.addEventListener("message", function (e) { if (e.data && typeof e.data.go === "string") openTab(e.data.go); });
+}
+
+/* ---------- start ---------- */
+function start() {
+  applyTheme(store.get("theme", "auto")); renderTheme();
+  if (location.protocol === "file:") {
+    $("host-msg").innerHTML = '<div class="notice"><p>You opened this page from a file. Prices will load, but notifications and installing it as an app only work once the site is hosted (see the setup steps).</p></div>';
+  }
+  $("feed-sub").textContent = 'Read and dated by Claude on ' + new Date(BUILT).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) +
+    '. "Read" means the article was opened. "Headline only" means just the headline was seen. Refreshed by replacing signals.js with a new one from Claude.';
+  S.newSignals = SIGNALS.filter(isNew).length;
+  renderBoard(); renderSignals(); renderRules(); renderLog(); renderChecklist(); renderNotify(); renderSources(); renderLaunch(); renderBinance(); renderTrend();
+  renderStatus(); renderKey(); updateBadges();
+  var hash = (location.hash || "").replace("#", "");
+  openTab(TABS.indexOf(hash) >= 0 ? hash : store.get("tab", "board"));
+  initSW();
+  var base = store.get("cgkey", "") ? 60000 : 120000;
+  jobPrices = makeJob("prices", loadPrices, base);
+  jobTop = makeJob("top", loadTop, base);
+  jobMarket = makeJob("market", loadMarket, 300000);
+  jobFng = makeJob("fng", loadFng, 1800000);
+  jobTrend = makeJob("trend", loadTrend, 300000);
+  jobLaunch = makeJob("launch", loadLaunches, 180000);
+  jobBinance = makeJob("binance", loadBinance, 180000);
+  jobs.forEach(function (j) { j.kick(); });
+}
+start();
+</script>
+</body>
+</html>
